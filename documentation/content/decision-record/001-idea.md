@@ -14,53 +14,52 @@ icon: lucide/lightbulb
 
 ## Context
 
-Wayland users on tiling compositors such as [Hyprland](https://hypr.land/) typically build a desktop environment by stitching together independent utilities: a status bar (`waybar`), an application launcher (`rofi` or `fuzzel`), a notification daemon (`dunst` or `mako`), and a screen locker (`hyprlock` or `swaylock`). Each utility uses its own configuration format, styling system, and IPC polling loop, resulting in fragmented keyboard navigation, visual inconsistency, and duplicated system state.
+Minimalist Wayland window managers deliberately omit a desktop shell. To get a working desktop, users stitch together separate programs for the status bar, application launcher, notification daemon, power menu, and screen locker. Each program has its own configuration syntax, styling rules, and background polling scripts. Keyboard navigation changes from one popup to the next, and the desktop never quite feels like a single system.
 
-My previous desktop shell (`lovemii`), built with [Aylur's GTK Shell (AGS)](https://aylur.github.io/ags/), consolidated these tools into a single runtime for daily use. However, it grew organically without upfront design tokens, interaction flows, or strict scope boundaries. `WISP` (**Widget Interface & Shell Platform**) restarts the project on [Quickshell](https://quickshell.org/) with a specification-first workflow, lower runtime overhead, and a unified monochrome visual identity, constrained strictly to what can be built cleanly with Quickshell (Qt6/QML) and shell scripting.
+I previously built a custom desktop shell for my own daily use to put all of those pieces in one place. While it worked, I kept adding widgets and side projects as I went without defining where the shell ended and standalone applications began. Over time, the codebase became hard to maintain.
+
+This project is a clean-slate rewrite to build a cohesive desktop shell with strict boundaries: handle core desktop chrome, session controls, and scriptable quick actions in one process, and leave full applications out of the shell.
 
 ## Requirements and Restrictions
 
-- **Target Users:** Personal-first daily driver tailored to the author's desktop workflow, published under `AGPL-3.0-or-later` with complete architectural and feature records so other Hyprland and Quickshell users can study, fork, or adapt it.
-- **In Scope:** Core desktop shell chrome, session lock/authentication, and script-backed launcher utilities across seven features:
-  1. [001: Login](../feature-record/001-login.md): Session authentication and lockscreen (`WlSessionLock`, PAM, and `fprintd` fingerprint support).
-  2. [002: Power Management](../feature-record/002-power-management.md): Session power actions (lock, suspend, reboot, poweroff) and power profile / battery status (`UPower`).
-  3. [003: System Tray](../feature-record/003-system-tray.md): Top-bar status indicators (PipeWire audio, network, clock, `StatusNotifierItem` tray icons) and an integrated `Mpris` media playback control popup.
-  4. [004: Workspace Tray](../feature-record/004-workspace-tray.md): Hyprland workspace indicator and active workspace navigation.
-  5. [005: Notifications](../feature-record/005-notifications.md): Desktop notification daemon, toast popups, and notification history.
-  6. [006: Overview](../feature-record/006-overview.md): Spatial workspace and window overview for Hyprland.
-  7. [007: Launcher](../feature-record/007-launcher/index.md): Keyboard-driven application launcher and extensible script command palette (handling local `dinit`/`systemd` and remote Tailscale SSH service toggles, `grim` + `tesseract`/`RapidOCR` screen OCR, `qalculate` math evaluation, dictionary lookups, and emoji selection).
+- **Target Users:** Built first for my own daily desktop workflow on Linux, while kept public so other Wayland users can inspect, fork, or adapt it.
+- **In Scope:**
+  - In-session screen locking and user authentication;
+  - Session power controls and battery/power state reporting;
+  - Persistent top-bar panels for system status (audio, network, clock, tray icons, active media playback controls) and workspace navigation;
+  - Desktop notification popups and history;
+  - Spatial overview of active workspaces and windows;
+  - A keyboard-driven launcher for opening applications and running shell scripts (such as service toggles, clipboard OCR, or quick calculations).
 - **Out of Scope:**
-  - Early-boot kernel splash themes (`Plymouth`), which execute in `initramfs` outside Wayland and Quickshell.
-  - Standalone personal productivity CRUD applications (dedicated time, habit, or task tracker GUIs).
-  - Full media streaming or library management clients (media integration is limited to MPRIS playback controls inside [003: System Tray](../feature-record/003-system-tray.md)).
-  - Standalone GUI windows for single-command scripts such as screen OCR or service toggling (handled as script-backed command providers inside [007: Launcher](../feature-record/007-launcher/index.md)).
-  - Window management, tiling layout algorithms, and display compositing (delegated to Hyprland).
-  - X11 support or compatibility layers for non-Hyprland Wayland compositors (`sway`, `niri`, KDE, GNOME).
-  - Runtime theme engines, user-customizable color schemes, or CSS skinning (visual tokens are fixed in [009: Visual Identity](./009-visual-identity.md)).
-  - Third-party plugin loading or external extension marketplaces.
-- **Environment / Platform:** Linux on Wayland with [Hyprland](https://hypr.land/) as the compositor, [Quickshell](https://quickshell.org/) (Qt6/QML) as the shell runtime, and standard POSIX/CLI scripts via `Quickshell.Io.Process`.
+  - Window management, tiling layouts, and display compositing (delegated to the Wayland compositor);
+  - Early-boot splash screens that run in `initramfs` before the graphical session starts;
+  - Standalone CRUD applications or databases (such as dedicated time, habit, or task trackers, or full music library clients);
+  - User-customizable theme engines, GUI skin editors, or third-party plugin marketplaces;
+  - X11 compatibility.
+- **Environment / Platform:** Linux on Wayland.
 
 ## Alternatives
 
-- **Continuing with Aylur's GTK Shell (AGS):** Preserved the working `lovemii` codebase, but carried accumulated technical debt from ad-hoc feature growth, lacked formal UX specifications, and had higher resource overhead than Qt6/QML scenegraph rendering.
-- **Assembling Off-the-Shelf Utilities (Waybar, Rofi, Dunst, hyprlock):** Reduces custom UI code for basic bars and menus, but requires maintaining disparate configuration DSLs, shell scripts, and styling rules without shared state or unified keyboard navigation.
-- **Bloated All-in-One Shell Suite (Including Custom Trackers, Boot Splash, and Media Clients):** Attempting to build full CRUD productivity trackers, a Navidrome/Jellybox music client, and an `initramfs` Plymouth theme inside the shell repository introduces severe scope creep and stretches QML beyond desktop chrome and scripting.
+- **Keep maintaining the old shell:** Avoids starting over, but keeps the accumulated technical debt and ad-hoc structure that made the previous version fragile.
+- **Stitch together standard Wayland utilities (`waybar`, `rofi`, `dunst`, `swaylock`):** Takes less custom UI code, but goes back to maintaining separate config files, duplicated status scripts, and inconsistent keyboard shortcuts.
+- **Use a full desktop environment (GNOME, KDE Plasma):** Gives a unified interface out of the box, but brings along a heavy service stack and floating-window defaults that do not fit a keyboard-first tiling setup.
+- **Build an all-in-one desktop and productivity suite:** Putting personal trackers, media clients, and boot themes inside the shell repository stretches the project beyond a desktop shell and makes it impossible to finish cleanly.
 
 ## Decision
 
-Build `WISP` as a focused, personal-first desktop shell on Quickshell for Hyprland, scoped strictly to session locking, persistent bar trays, notifications, spatial overview, and a script-extensible command launcher (`001` through `007`).
+Build a focused, personal-first desktop shell for Wayland that unifies session locking, status bars, notifications, window overview, and a scriptable command launcher into a single runtime.
 
-Workflow automations such as screen OCR, local/Tailscale service toggles, and quick calculations MUST be implemented as CLI script pipelines surfaced through [007: Launcher](../feature-record/007-launcher/index.md) or [003: System Tray](../feature-record/003-system-tray.md) rather than standalone QML applications. Every feature MUST be specified in a [Feature Record](../feature-record/index.md) before implementation begins, as governed by [006: Requirements and Feature Engineering](./006-requirements.md).
+If a workflow can be solved by a shell script or an external CLI tool, the shell will only provide the launcher entry or status indicator for it rather than reimplementing a dedicated GUI application.
 
 ## Consequences
 
 ### Positives
 
-- Cutting non-Quickshell (`Plymouth`) and full-application features (`Time/Habit/Task Trackers`, `Music Manager`, standalone `OCR`/`Service Manager` GUIs) reduces the project from 14 disparate features to 7 cohesive desktop shell components.
-- Folding OCR, service management, and calculations into [007: Launcher](../feature-record/007-launcher/index.md) and MPRIS into [003: System Tray](../feature-record/003-system-tray.md) preserves daily workflow utility using lightweight shell scripts.
-- Keeps the entire codebase within a single technology boundary: Quickshell QML + Hyprland IPC + CLI scripts.
+- Clear scope boundaries prevent the shell from turning into a collection of half-finished productivity apps.
+- Every desktop overlay and bar shares the same process, state, and keyboard behavior.
+- Relying on shell scripts for secondary utilities (like OCR, calculators, or service toggles) keeps the UI layer small.
 
 ### Negatives
 
-- Personal productivity tracking (time, habits, tasks) and full music library browsing must be handled by dedicated external applications or CLI tools rather than native shell widgets.
-- Tight coupling to Hyprland IPC and a fixed visual design means users on other compositors or those wanting custom color themes must fork and modify the source code.
+- Anything outside desktop chrome (such as task tracking, habit logging, or music library management) must be handled by separate CLI or desktop programs.
+- Tailoring the shell to a single personal workflow means other users will likely need to edit the source code rather than toggling settings in a preferences window.
