@@ -1,3 +1,7 @@
+---
+icon: lucide/panel-top
+---
+
 <!-- markdownlint-disable MD033 -->
 
 # 003: System Tray

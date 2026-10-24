@@ -1,3 +1,7 @@
+---
+icon: lucide/lock
+---
+
 <!-- markdownlint-disable MD033 -->
 
 # 001: Login

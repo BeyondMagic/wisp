@@ -1,3 +1,7 @@
+---
+icon: lucide/bell
+---
+
 <!-- markdownlint-disable MD033 -->
 
 # 005: Notifications

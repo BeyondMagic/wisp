@@ -1,3 +1,7 @@
+---
+icon: lucide/layout-grid
+---
+
 <!-- markdownlint-disable MD033 -->
 
 # 006: Overview

@@ -1,3 +1,7 @@
+---
+icon: lucide/power
+---
+
 <!-- markdownlint-disable MD033 -->
 
 # 002: Power Management

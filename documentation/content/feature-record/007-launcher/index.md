@@ -1,3 +1,7 @@
+---
+icon: lucide/command
+---
+
 <!-- markdownlint-disable MD033 -->
 
 # 007: Launcher
