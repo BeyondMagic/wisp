@@ -9,46 +9,56 @@ copyright = "BeyondMagic © 2026"
 
 repo_url = "https://github.com/BeyondMagic/lovemii"
 repo_name = "BeyondMagic/lovemii"
-edit_uri = "edit/main/docs/"
+edit_uri = "edit/main/documentation/content/"
 
 extra_css = [
-	"stylesheet/ui.css",
-  "stylesheet/presentation.css"
+  "stylesheet/typography.css",
+  "stylesheet/identity.css",
+  "stylesheet/presentation.css",
 ]
 extra_javascript = [
-  "javascript/presentation.js"
+  "javascript/presentation.js",
 ]
 
 nav = [
-  { "General" = "index.md" },
+  { "General" = [
+      { "Introduction" = "index.md" },
+      { "Glossary" = "glossary.md" },
+      { "Metrics & Results" = "management/metrics.md" },
+  ]},
+  { "Features" = [
+      { "General" = "feature-record/index.md" },
+      { "000: Template" = "feature-record/000-template.md" },
+      { "001: Plymouth" = "feature-record/001-plymouth.md" },
+      { "002: Login" = "feature-record/002-login.md" },
+      { "003: Power Management" = "feature-record/003-power-management.md" },
+      { "004: System Tray" = "feature-record/004-system-tray.md" },
+      { "005: Workspace Tray" = "feature-record/005-workspace-tray.md" },
+      { "006: Time Tracker" = "feature-record/006-time-tracker/index.md" },
+      { "007: Notifications" = "feature-record/007-notifications.md" },
+      { "008: Overview" = "feature-record/008-overview.md" },
+      { "009: Launcher" = "feature-record/009-launcher/index.md" },
+      { "010: Habit Tracker" = "feature-record/010-habit-tracker.md" },
+      { "011: Task Tracker" = "feature-record/011-task-tracker.md" },
+      { "012: OCR" = "feature-record/012-ocr.md" },
+      { "013: Music Manager" = "feature-record/013-music-manager/index.md" },
+      { "014: Service Manager" = "feature-record/014-service-manager/index.md" },
+  ]},
   { "Decision Record" = [
       { "General" = "decision-record/index.md" },
       { "000: Template" = "decision-record/000-template.md" },
-      { "001: Name" = "decision-record/001-name-decision.md" },
-      { "002: UI Design" = "decision-record/002-ui-design-decision.md" },
-      { "003: UX Behavior" = "decision-record/003-ux-behavior-interaction-flows.md" },
-      { "004: Features & Widgets" = "decision-record/004-development-features-widgets.md" },
-      { "005: Engine & Compositor" = "decision-record/005-engine-compositor.md" },
-      { "006: AI Usage & Privacy" = "decision-record/006-ai-usage-privacy.md" },
-      { "007: License" = "decision-record/007-license-selection.md" },
-  ]},
-  { "Features" = [
-      { "General" = "feature/index.md" },
-      { "000: Template" = "feature/000-template.md" },
-      { "001: Plymouth" = "feature/001-plymouth.md" },
-      { "002: Login" = "feature/002-login.md" },
-      { "003: Power Management" = "feature/003-power-management.md" },
-      { "004: System Tray" = "feature/004-system-tray.md" },
-      { "005: Workspace Tray" = "feature/005-workspace-tray.md" },
-      { "006: Time Tracker" = "feature/006-time-tracker/index.md" },
-      { "007: Notifications" = "feature/007-notifications.md" },
-      { "008: Overview" = "feature/008-overview.md" },
-      { "009: Launcher" = "feature/009-launcher/index.md" },
-      { "010: Habit Tracker" = "feature/010-habit-tracker.md" },
-      { "011: Task Tracker" = "feature/011-task-tracker.md" },
-      { "012: OCR" = "feature/012-ocr.md" },
-      { "013: Music Manager" = "feature/013-music-manager/index.md" },
-      { "014: Service Manager" = "feature/014-service-manager/index.md" },
+      { "001: Idea" = "decision-record/001-idea.md" },
+      { "002: License" = "decision-record/002-license.md" },
+      { "003: Writing Style" = "decision-record/003-writing-style.md" },
+      { "004: Name" = "decision-record/004-name.md" },
+      { "005: Quality Factors" = "decision-record/005-quality-factors.md" },
+      { "006: Requirements" = "decision-record/006-requirements.md" },
+      { "007: Architecture" = "decision-record/007-architecture.md" },
+      { "008: AI Usage" = "decision-record/008-ai-usage.md" },
+      { "009: Visual Identity" = "decision-record/009-visual-identity.md" },
+      { "010: UX Paradigm" = "decision-record/010-ux-paradigm.md" },
+      { "011: Testing Strategy" = "decision-record/011-testing-strategy.md" },
+      { "012: CI/CD & Tooling" = "decision-record/012-ci-cd-and-tooling.md" },
   ]},
 ]
 
@@ -131,3 +141,11 @@ pymdownx.tabbed.alternate_style = true
 pymdownx.tabbed.combine_header_slug = true
 pymdownx.tasklist.custom_checkbox = true
 pymdownx.tilde = {}
+pymdownx.snippets = { base_path = "snippets" }
+
+[project.markdown_extensions.zensical_glossary]
+glossary_file = "glossary.md"
+base_url = "https://beyondmagic.github.io/lovemii/glossary/"
+heading_level = 3
+first_only = true
+inline_definitions = true

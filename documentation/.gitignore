@@ -1,3 +1,6 @@
 # zensical build artifacts
 .cache
 site
+
+# Python virtual environment
+.venv

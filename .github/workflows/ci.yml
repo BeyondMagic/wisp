@@ -1,0 +1,47 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - master
+      - main
+  pull_request:
+    branches:
+      - master
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  validate-docs:
+    name: Documentation Validation
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+      - run: pip install zensical zensical-glossary
+      - name: Generate metrics snippets
+        run: python3 .github/scripts/update_metrics.py
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Build documentation
+        working-directory: documentation
+        run: zensical build --clean
+
+  # Language-specific quality gate template
+  # Customize the steps below to match your project's programming language and tooling
+  validate-code:
+    name: Code Quality Gates
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify Quality Gates
+        run: |
+          echo "Quality Gate Scaffolding active."
+          echo "Configure linters, formatters, typecheckers, and test commands per ADR-011 and ADR-012."
+

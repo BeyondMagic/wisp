@@ -1,0 +1,30 @@
+:root {
+	--md-text-font: "Inter", sans-serif;
+	--md-typeset-font-size: 14px;
+	--md-typeset-line-height: 1.7;
+}
+
+body,
+.md-typeset {
+	text-rendering: optimizeLegibility;
+	font-family: "Inter", sans-serif;
+	font-optical-sizing: auto;
+	font-size: 14px;
+	letter-spacing: 0.2px;
+	line-height: 1.7;
+}
+
+.md-typeset p,
+.md-typeset li,
+.md-typeset td,
+.md-typeset th,
+.md-typeset blockquote {
+	font-size: 14px;
+	letter-spacing: 0.2px;
+	line-height: 1.7;
+}
+
+span.md-typeset-planned {
+	color: #666666;
+}
+

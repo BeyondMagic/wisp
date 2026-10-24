@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "name": "template",
+  "version": "0.1.0",
+  "upstream": "https://github.com/BeyondMagic/template",
+  "updated_at": "2026-10-24",
+  "managed_paths": [
+    ".agents/skills/grill-me/",
+    ".agents/skills/humanizer/",
+    ".github/scripts/update_metrics.py",
+    ".github/workflows/ci.yml",
+    ".github/workflows/docs.yml",
+    ".github/workflows/metrics.yml",
+    ".vscode/settings.json",
+    ".vscode/tasks.json",
+    "documentation/.gitignore",
+    "documentation/zensical.toml",
+    "documentation/snippets/",
+    "documentation/content/stylesheet/typography.css",
+    "documentation/content/decision-record/000-template.md",
+    "documentation/content/feature-record/000-template.md",
+    "tests/",
+    "AGENTS.md"
+  ]
+}
+

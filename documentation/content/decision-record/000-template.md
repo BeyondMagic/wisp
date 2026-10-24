@@ -1,30 +1,39 @@
+---
+icon: lucide/file-plus
+---
+
 <!-- markdownlint-disable MD033 -->
 
-# 000: Template
+# 000: Decision Record Template
 
-- **Status:** <span style="color: #666666">Proposed</span>
-- **Date:** <span style="color: #666666">Date of decision</span>
-- **Deciders:** <span style="color: #666666">List of people who made the decision</span>
-- **Decision:** <span style="color: #666666">Summary of the decision being made</span>
+- **Type:** <span class="md-typeset-planned">Architecture | Social | Design | Product | Security | Operational | Strategy</span>
+- **Status:** <span class="md-typeset-planned">Planned | Proposed | Accepted | Rejected | Deprecated</span>
+- **Date:** <span class="md-typeset-planned">YYYY-MM-DD</span>
+- **Author(s) / Deciders:** <span class="md-typeset-planned">People responsible for writing and approving the decision</span>
+- **Question:** <span class="md-typeset-planned">The core question this decision record answers</span>
 
 ## Context
 
-<span style="color: #666666">Provide context for the decision being made. This section should explain why the decision is necessary and what problem it aims to solve.</span>
+<span class="md-typeset-planned">Explain why this decision is necessary, the problem it solves, and the goals it aims to achieve.</span>
 
-## Requirements and restrictions
+## Requirements and Restrictions
 
-<span style="color: #666666">List the requirements and restrictions that must be considered when making this decision.</span>
+<span class="md-typeset-planned">List the functional, technical, legal, or organizational constraints that must be satisfied.</span>
+
+## Alternatives
+
+<span class="md-typeset-planned">Summarize the viable alternatives that were considered and the specific reasons they were not chosen.</span>
 
 ## Decision
 
-<span style="color: #666666">Clearly state the decision that has been made. This section should provide a concise summary of the chosen solution or approach.</span>
+<span class="md-typeset-planned">State the chosen solution or policy clearly and concisely.</span>
 
 ## Consequences
 
 ### Positives
 
-<span style="color: #666666">List the positive consequences of the decision. This section should highlight the benefits and advantages of the chosen solution.</span>
+<span class="md-typeset-planned">List the concrete benefits enabled by this decision.</span>
 
 ### Negatives
 
-<span style="color: #666666">List the negative consequences of the decision. This section should highlight any potential drawbacks or risks associated with the chosen solution.</span>
+<span class="md-typeset-planned">List the trade-offs, costs, or risks introduced by this decision and how they will be mitigated.</span>
