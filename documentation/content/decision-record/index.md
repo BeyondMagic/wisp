@@ -13,7 +13,7 @@ Technical, architectural, product, and design decisions, along with the reasonin
 | 000 | 2026-10-03 | [Template](./000-template.md)                      | -            | **Accepted** |
 | 001 | 2026-10-24 | [Project Idea and Scope](./001-idea.md)            | Product      | **Accepted** |
 | 002 | 2026-10-03 | [License Selection](./002-license.md)              | Strategy     | **Accepted** |
-| 003 | 2026-10-18 | [Writing Style](./003-writing-style.md)            | Social       | Proposed     |
+| 003 | 2026-10-24 | [Writing Style](./003-writing-style.md)            | Social       | **Accepted** |
 | 004 | 2026-10-23 | [Project Name](./004-name.md)                      | Product      | **Accepted** |
 | 005 | 2026-10-18 | [Quality Factors](./005-quality-factors.md)        | Architecture | Proposed     |
 | 006 | 2026-10-03 | [Requirements](./006-requirements.md)              | Product      | **Accepted** |
