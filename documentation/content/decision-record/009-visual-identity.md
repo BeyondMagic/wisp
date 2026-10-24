@@ -23,7 +23,7 @@ This record covers the visual foundation: branding assets, color palette, surfac
 - Pure black background for deep contrast and low power use on OLED screens;
 - Light typography over dark surfaces, using white text with varying opacity;
 - Rely on font weight, size, and opacity to show hierarchy and clickability instead of heavy borders, badges, or saturated background colors;
-- Strictly monochrome for the interface chrome and text, reserving color for critical system warnings or errors (while documentation uses pink brand accents in light and dark themes);
+- Strictly monochrome for the interface chrome and text, reserving color for critical system warnings or errors (while documentation uses the `#60CDEA` cyan brand accent);
 - Crisp legibility at small sizes on the top bar and larger widget scales.
 
 ## Alternatives
@@ -38,11 +38,12 @@ I am setting the visual identity and UI design system rules as follows:
 
 ### Branding Assets
 
-Repository and documentation branding assets reside under `documentation/content/assets/` with dedicated `light/` and `dark/` theme variants:
+Repository and documentation branding assets reside under `documentation/content/assets/` organized by lockup type and target size:
 
-- **Icon Mark:** `assets/light/logo.svg` (`#E92063` deep pink) and `assets/dark/logo.svg` (`#F8ACDD` pastel pink, `#A06F90` documentation dark accent).
-- **Wordmark & Logotype:** `assets/light/wordmark.svg`, `assets/dark/wordmark.svg`, `assets/light/logotype.svg`, and `assets/dark/logotype.svg`.
-- **Decorative Pattern:** `assets/light/block-heart-pattern.svg` and `assets/dark/block-heart-pattern.svg`.
+- **Favicon and Icon Mark (`assets/favicon/`):** Multi-resolution SVG icons (`16.svg`, `24.svg`, `32.svg`, `48.svg`, `64.svg`, `128.svg`, `180.svg`, `192.svg`, `400.svg`, `512.svg`, and `1024.svg`) in `#60CDEA` cyan. `assets/favicon/32.svg` serves as the browser favicon and `assets/favicon/48.svg` as the documentation navigation bar logo.
+- **Logotype (`assets/logotype/`):** Stacked icon mark and wordmark lockup in `91.81.svg` (`159x158`), `128.svg` (`259x259`, used for documentation and repository hero headers), and `400.svg` (`687x687`). Rendered in monochrome black and inverted automatically in dark mode via `filter: invert(1)`.
+- **Wordmark (`assets/wordmark/`):** Horizontal wordmark lockup in `91.81.svg` (`158x47`), `128.svg` (`220x66`), and `400.svg` (`687x218`), also inverted in dark mode.
+- **Decorative Patterns (`assets/`):** `assets/block_heart_pattern.svg` and `assets/heart-pattern-grey.svg` (`48x48` repeating tile patterns used in the documentation footer).
 
 ### Shell Colors and Surfaces
 

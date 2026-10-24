@@ -17,8 +17,8 @@ Software measurement connects project activities to objective decision-making. F
 
 | Contributor | Visual Identifier | Graph Series | Commit History |
 | :--- | :--- | :--- | :--- |
-| <img src="https://avatars.githubusercontent.com/u/51831435?v=4" width="24" height="24" style="border-radius: 50%; vertical-align: middle; margin-right: 6px;" alt="BeyondMagic avatar"> **BeyondMagic** | <span style="display:inline-block;width:12px;height:12px;border-radius:50%;background-color:#e91e63;vertical-align:middle;margin-right:4px;"></span> `#e91e63` | Series 1 (Pink) | [View Commits](https://github.com/BeyondMagic/lovemii/commits?author=BeyondMagic) |
-| <img src="https://avatars.githubusercontent.com/in/15368?v=4" width="24" height="24" style="border-radius: 50%; vertical-align: middle; margin-right: 6px;" alt="github-actions[bot] avatar"> **github-actions[bot]** | <span style="display:inline-block;width:12px;height:12px;border-radius:50%;background-color:#2563eb;vertical-align:middle;margin-right:4px;"></span> `#2563eb` | Series 2 (Blue) | [View Commits](https://github.com/BeyondMagic/lovemii/commits?author=github-actions%5Bbot%5D) |
+| <img src="https://avatars.githubusercontent.com/u/51831435?v=4" width="24" height="24" style="border-radius: 50%; vertical-align: middle; margin-right: 6px;" alt="BeyondMagic avatar"> **BeyondMagic** | <span style="display:inline-block;width:12px;height:12px;border-radius:50%;background-color:#e91e63;vertical-align:middle;margin-right:4px;"></span> `#e91e63` | Series 1 (Pink) | [View Commits](https://github.com/BeyondMagic/wisp/commits?author=BeyondMagic) |
+| <img src="https://avatars.githubusercontent.com/in/15368?v=4" width="24" height="24" style="border-radius: 50%; vertical-align: middle; margin-right: 6px;" alt="github-actions[bot] avatar"> **github-actions[bot]** | <span style="display:inline-block;width:12px;height:12px;border-radius:50%;background-color:#2563eb;vertical-align:middle;margin-right:4px;"></span> `#2563eb` | Series 2 (Blue) | [View Commits](https://github.com/BeyondMagic/wisp/commits?author=github-actions%5Bbot%5D) |
 
 ## Code Activity and Churn
 

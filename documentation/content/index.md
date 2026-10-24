@@ -6,12 +6,11 @@ icon: lucide/book-open
 
 # Introduction
 
-`lovemii` is a personal desktop shell for Wayland, built with [Quickshell](https://quickshell.org/) and designed to run alongside [Hyprland](https://hypr.land/).
+`WISP` is a personal desktop shell for Wayland, built with [Quickshell](https://quickshell.org/) and designed to run alongside [Hyprland](https://hypr.land/).
 
-![lovemii logotype](assets/light/logotype.svg){: .center-image .only-light }
-![lovemii logotype](assets/dark/logotype.svg){: .center-image .only-dark }
+![WISP logotype](assets/logotype/128.svg){: .center-image .invert-dark }
 
-It replaces an earlier shell of the same name built with [Aylurs GTK Shell (AGS)](https://aylur.github.io/ags/). While the old shell worked for daily use, it grew organically without structured design rules or interaction specifications. This rewrite restarts the project on Quickshell with a cleaner architecture, better performance, and a consistent visual style.
+It replaces an earlier shell built with [Aylurs GTK Shell (AGS)](https://aylur.github.io/ags/). While the old shell worked for daily use, it grew organically without structured design rules or interaction specifications. This rewrite restarts the project on Quickshell with a cleaner architecture, better performance, and a consistent visual style.
 
 ## Documentation Layout
 
@@ -48,4 +47,4 @@ zensical build --clean
 
 ## License
 
-`lovemii` is free software published under the [GNU Affero General Public License v3.0](https://www.gnu.org/licenses/agpl-3.0.html) (`AGPL-3.0-or-later`).
+`WISP` is free software published under the [GNU Affero General Public License v3.0](https://www.gnu.org/licenses/agpl-3.0.html) (`AGPL-3.0-or-later`).

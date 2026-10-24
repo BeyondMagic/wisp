@@ -27,9 +27,9 @@ It features a dynamic Miku character (37 variants) that dances in a MP3 player s
 1. Turn on the computer;
 2. The bootloader loads the kernel and initial RAM disk;
 3. Plymouth starts and displays the boot animation;
-4. lovemii's logo appears on the middle of the screen;
-5. the wordmark "lovemii" slides in from the left side of the logo and stops at the right side of the logo, centering the logo and wordmark on the screen;
-6. the wordmark "lovemii" slides out to the right side of the logo and disappears, leaving only the logo centered on the screen;
+4. WISP's logo appears on the middle of the screen;
+5. the wordmark "WISP" slides in from the left side of the logo and stops at the right side of the logo, centering the logo and wordmark on the screen;
+6. the wordmark "WISP" slides out to the right side of the logo and disappears, leaving only the logo centered on the screen;
 
 ... Plymouth ends and shows the login screen.
 

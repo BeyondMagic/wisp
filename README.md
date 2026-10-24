@@ -1,18 +1,14 @@
 <p align="center">
-  <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="documentation/content/assets/dark/logotype.svg">
-    <source media="(prefers-color-scheme: light)" srcset="documentation/content/assets/light/logotype.svg">
-    <img alt="lovemii logotype" src="documentation/content/assets/light/logotype.svg" width="360">
-  </picture>
+  <img alt="WISP logotype" src="documentation/content/assets/logotype/128.svg" width="259">
 </p>
 
-# lovemii
+# WISP
 
 A minimalist desktop shell for Wayland, built with [Quickshell](https://quickshell.org/) and designed to run alongside [Hyprland](https://hypr.land/).
 
 ## Overview
 
-`lovemii` is a desktop shell built around pure black surfaces, high-contrast typography, and opacity-based hierarchy.
+`WISP` is a desktop shell built around pure black surfaces, high-contrast typography, and opacity-based hierarchy.
 
 ## Repository Structure
 
@@ -28,7 +24,7 @@ A minimalist desktop shell for Wayland, built with [Quickshell](https://quickshe
 
 Full project documentation, architectural decision records, and feature specifications are available on the documentation site:
 
-- **Site:** [https://beyondmagic.github.io/lovemii/](https://beyondmagic.github.io/lovemii/)
+- **Site:** [https://beyondmagic.github.io/wisp/](https://beyondmagic.github.io/wisp/)
 - **Glossary:** [documentation/content/glossary.md](documentation/content/glossary.md)
 - **Decision records:** [documentation/content/decision-record/](documentation/content/decision-record/index.md)
 - **Feature records:** [documentation/content/feature-record/](documentation/content/feature-record/index.md)

@@ -1,23 +1,23 @@
 [project]
-site_url = "https://beyondmagic.github.io/lovemii/"
-site_name = "lovemii"
+site_url = "https://beyondmagic.github.io/wisp/"
+site_name = "WISP"
 site_description = "A long-desired attempt into creating a new way to use a desktop environment."
 site_author = "João V. Farias"
 docs_dir = "content"
 
 copyright = "BeyondMagic © 2026"
 
-repo_url = "https://github.com/BeyondMagic/lovemii"
-repo_name = "BeyondMagic/lovemii"
+repo_url = "https://github.com/BeyondMagic/wisp"
+repo_name = "BeyondMagic/wisp"
 edit_uri = "edit/main/documentation/content/"
 
 extra_css = [
   "stylesheet/typography.css",
   "stylesheet/identity.css",
-  "stylesheet/presentation.css",
+  "https://cdn.jsdelivr.net/gh/BeyondMagic/zensical-slides@latest/dist/zensical-slides.min.css",
 ]
 extra_javascript = [
-  "javascript/presentation.js",
+  "https://cdn.jsdelivr.net/gh/BeyondMagic/zensical-slides@latest/dist/zensical-slides.min.mjs",
 ]
 
 nav = [
@@ -66,8 +66,8 @@ nav = [
 generator = false
 
 [project.theme]
-logo = "assets/logo.svg"
-favicon = "assets/logo.svg"
+logo = "assets/favicon/48.svg"
+favicon = "assets/favicon/32.svg"
 language = "en"
 features = [
   "announce.dismiss",
@@ -93,7 +93,7 @@ features = [
 media = "(prefers-color-scheme)"
 toggle.icon = "lucide/sun-moon"
 toggle.name = "Switch to light mode"
-primary = "pink"
+primary = "custom"
 accent = "custom"
 
 [[project.theme.palette]]
@@ -101,7 +101,7 @@ media = "(prefers-color-scheme: light)"
 scheme = "default"
 toggle.icon = "lucide/sun"
 toggle.name = "Switch to dark mode"
-primary = "pink"
+primary = "custom"
 accent = "custom"
 
 [[project.theme.palette]]
@@ -109,7 +109,7 @@ media = "(prefers-color-scheme: dark)"
 scheme = "slate"
 toggle.icon = "lucide/moon"
 toggle.name = "Switch to system preference"
-primary = "pink"
+primary = "custom"
 accent = "custom"
 
 [project.markdown_extensions]
@@ -145,7 +145,7 @@ pymdownx.snippets = { base_path = "snippets" }
 
 [project.markdown_extensions.zensical_glossary]
 glossary_file = "glossary.md"
-base_url = "https://beyondmagic.github.io/lovemii/glossary/"
+base_url = "https://beyondmagic.github.io/wisp/glossary/"
 heading_level = 3
 first_only = true
 inline_definitions = true
