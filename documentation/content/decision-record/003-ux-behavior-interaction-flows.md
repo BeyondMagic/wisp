@@ -1,3 +1,5 @@
+<!-- markdownlint-disable MD033 -->
+
 # 003: UX behavior and interaction flows
 
 - **Status:** Planned

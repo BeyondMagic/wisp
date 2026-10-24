@@ -1,3 +1,5 @@
+<!-- markdownlint-disable MD033 -->
+
 # 000: Template
 
 - **Status:** <span style="color: #666666">Proposed</span>
