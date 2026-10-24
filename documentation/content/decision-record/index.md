@@ -11,7 +11,7 @@ Technical, architectural, product, and design decisions, along with the reasonin
 | ID  | Date       | Decision                                           | Type         | Status       |
 | :-- | :--------- | :------------------------------------------------- | :----------- | :----------- |
 | 000 | 2026-10-03 | [Template](./000-template.md)                      | -            | **Accepted** |
-| 001 | 2026-10-03 | [Project Idea and Scope](./001-idea.md)            | Product      | Proposed     |
+| 001 | 2026-10-24 | [Project Idea and Scope](./001-idea.md)            | Product      | **Accepted** |
 | 002 | 2026-10-03 | [License Selection](./002-license.md)              | Strategy     | **Accepted** |
 | 003 | 2026-10-18 | [Writing Style](./003-writing-style.md)            | Social       | Proposed     |
 | 004 | 2026-10-23 | [Project Name](./004-name.md)                      | Product      | **Accepted** |

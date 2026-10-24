@@ -1,6 +1,6 @@
 <!-- markdownlint-disable MD033 -->
 
-# 004: System Tray
+# 002: Power Management
 
 - **Status:** <span class="md-typeset-planned">Proposed</span>
 - **Date:** <span class="md-typeset-planned">YYYY-MM-DD</span>

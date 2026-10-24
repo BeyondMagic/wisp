@@ -1,6 +1,6 @@
 <!-- markdownlint-disable MD033 -->
 
-# 007: Notifications
+# 004: Workspace Tray
 
 - **Status:** <span class="md-typeset-planned">Proposed</span>
 - **Date:** <span class="md-typeset-planned">YYYY-MM-DD</span>

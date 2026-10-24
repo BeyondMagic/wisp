@@ -1,55 +1,29 @@
 flowchart TD
-    subgraph BootAuth["Boot & Authentication"]
-        Plymouth["001: Plymouth"]
-        Login["002: Login"]
-        Plymouth -->|Boot completed| Login
+    subgraph Boot ["Session Authentication"]
+        F001["001: Login / Lockscreen"]
     end
 
-    Login -->|Authenticate| Home["Home / Desktop Session"]
+    F001 -->|Authenticate| Home["Home (Desktop)"]
 
-    subgraph Desktop["Desktop Session (Home)"]
-        Home --- TrayWorkspace["005: Workspace Tray"]
-        Home --- TraySystem["004: System Tray"]
-        Home --- TimeTracker["006: Time Tracker"]
-        Home --- MusicManager["013: Music Manager"]
+    subgraph Shell ["Persistent Bar & Trays"]
+        F003["003: System Tray (Audio, Network, MPRIS)"]
+        F004["004: Workspace Tray"]
+        F005["005: Notifications"]
     end
 
-    subgraph Overlays["Overlays & Modals"]
-        Launcher["009: Launcher"]
-        Overview["008: Overview"]
-        Notifications["007: Notifications"]
-        PowerMenu["003: Power Management"]
-        HabitTracker["010: Habit Tracker"]
-        TaskTracker["011: Task Tracker"]
-        OCR["012: OCR"]
-        ServiceManager["014: Service Manager"]
+    subgraph Overlays ["Modal Overlays"]
+        F002["002: Power Management"]
+        F006["006: Overview"]
+        F007["007: Launcher (Apps, Services, OCR, Calc)"]
     end
 
-    Home -->|Hotkey / Click| Launcher
-    Home -->|Hotkey / Gesture| Overview
-    Home -->|Daemon event / Panel| Notifications
-    Home -->|Hotkey / Status click| PowerMenu
-    Home -->|Shortcut / Tray| HabitTracker
-    Home -->|Shortcut / Tray| TaskTracker
-    Home -->|Capture trigger| OCR
-    Home -->|Shortcut / Tray| ServiceManager
+    Home --> F003
+    Home --> F004
+    Home --> F005
 
-    PowerMenu -->|Lock| Login
-    PowerMenu -->|Restart| Plymouth
-    PowerMenu -->|Shutdown| PowerOff(["Power Off"])
+    Home --> F002
+    Home --> F006
+    Home --> F007
 
-    click Plymouth "./001-plymouth.md" "001: Plymouth"
-    click Login "./002-login.md" "002: Login"
-    click PowerMenu "./003-power-management.md" "003: Power Management"
-    click TraySystem "./004-system-tray.md" "004: System Tray"
-    click TrayWorkspace "./005-workspace-tray.md" "005: Workspace Tray"
-    click TimeTracker "./006-time-tracker/index.md" "006: Time Tracker"
-    click Notifications "./007-notifications.md" "007: Notifications"
-    click Overview "./008-overview.md" "008: Overview"
-    click Launcher "./009-launcher/index.md" "009: Launcher"
-    click HabitTracker "./010-habit-tracker.md" "010: Habit Tracker"
-    click TaskTracker "./011-task-tracker.md" "011: Task Tracker"
-    click OCR "./012-ocr.md" "012: OCR"
-    click MusicManager "./013-music-manager/index.md" "013: Music Manager"
-    click ServiceManager "./014-service-manager/index.md" "014: Service Manager"
-
+    F002 -->|Lock| F001
+    F004 -->|Expand| F006

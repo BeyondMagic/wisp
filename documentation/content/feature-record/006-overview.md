@@ -1,6 +1,6 @@
 <!-- markdownlint-disable MD033 -->
 
-# 003: Power Management
+# 006: Overview
 
 - **Status:** <span class="md-typeset-planned">Proposed</span>
 - **Date:** <span class="md-typeset-planned">YYYY-MM-DD</span>

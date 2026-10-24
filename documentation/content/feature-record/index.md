@@ -1,48 +1,39 @@
 ---
-icon: lucide/layers
+icon: lucide/list-checks
 ---
 
 <!-- markdownlint-disable MD033 -->
 
-# Feature List
+# Features
 
-Specifications, interaction flows, and implementation notes for shell features are documented here.
+This section contains the list of features that are being planned, developed, or have been implemented for the project.
 
-## User flow architecture
+## User-Flow
 
-The diagram below maps how users move through the shell, from initial boot to desktop interactions, persistent panel widgets, and overlay utilities:
+High-level state and screen navigation across the shell lifecycle, mapping how the user moves from authentication to the desktop (`Home`) and its overlay panels and status widgets:
 
 ```mermaid
 --8<-- "feature-record/user-flow.mmd"
 ```
 
-## Features
+## List
 
-| ID     | Date                    | Feature                             | Status   |
-| :----- | :---------------------- | :---------------------------------- | :------- |
-| 000    | 2026-10-03 - 2026-10-03 | [Template](000-template.md) | **Accepted** |
-| 001    | 2026-10-03 -            | [Plymouth](001-plymouth.md) | Proposed |
-| 002    | 2026-10-03 -            | [Login](002-login.md) | Proposed |
-| 003    | 2026-10-03 -            | [Power Management](003-power-management.md) | Planned |
-| 004    | 2026-10-03 -            | [System Tray](004-system-tray.md) | Planned |
-| 005    | 2026-10-03 -            | [Workspace Tray](005-workspace-tray.md) | Planned |
-| 006    | 2026-10-03 -            | [Time Tracker](006-time-tracker/index.md) | Proposed |
-| 007    | 2026-10-03 -            | [Notifications](007-notifications.md) | Planned |
-| 008    | 2026-10-03 -            | [Overview](008-overview.md) | Planned |
-| 009    | 2026-10-03 -            | [Launcher](009-launcher/index.md) | Proposed |
-| 010    | 2026-10-03 -            | [Habit Tracker](010-habit-tracker.md) | Planned |
-| 011    | 2026-10-03 -            | [Task Tracker](011-task-tracker.md) | Planned |
-| 012    | 2026-10-03 -            | [OCR](012-ocr.md) | Proposed |
-| 013    | 2026-10-11 -            | [Music Manager](013-music-manager/index.md) | Proposed |
-| 014    | 2026-10-12 -            | [Service Manager](014-service-manager/index.md) | Proposed |
-
-<!-- Task Tracker will supersede habit tracker -->
+| ID  | Date       | Feature                                          | Status       |
+| :-- | :--------- | :----------------------------------------------- | :----------- |
+| 000 | 2026-10-03 | [Template](./000-template.md)                    | **Accepted** |
+| 001 | -          | [Login](./001-login.md)                          | Proposed     |
+| 002 | -          | [Power Management](./002-power-management.md)    | Proposed     |
+| 003 | -          | [System Tray](./003-system-tray.md)              | Proposed     |
+| 004 | -          | [Workspace Tray](./004-workspace-tray.md)        | Proposed     |
+| 005 | -          | [Notifications](./005-notifications.md)          | Proposed     |
+| 006 | -          | [Overview](./006-overview.md)                    | Proposed     |
+| 007 | -          | [Launcher](./007-launcher/index.md)              | Proposed     |
 
 ## Legend
 
-- **Planned**: template of a feature record before project-specific changes;
-- **Proposed**: the feature is under discussion and has not been approved yet;
-- **Accepted**: the feature is approved and scheduled or actively being built;
-- **Developed**: the feature is built and in active use;
-- **Rejected**: the feature was considered but decided against;
-- **Deprecated**: the feature was once in use but is no longer supported or recommended.
+### Status
+
+- **Proposed**: the feature is still in the planning phase and has not been finalized yet, maybe missing some parts or having some uncertainties;
+- **Accepted**: the feature has been finalized and is ready to be implemented, or is already being implemented;
+- **Rejected**: the feature was considered, but ultimately not chosen;
+- **Deprecated**: the feature was once accepted, but is no longer relevant or recommended.

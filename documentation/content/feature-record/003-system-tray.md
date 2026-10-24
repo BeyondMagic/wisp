@@ -1,14 +1,16 @@
 <!-- markdownlint-disable MD033 -->
 
-# 010: Habit Tracker
+# 003: System Tray
 
 - **Status:** <span class="md-typeset-planned">Proposed</span>
 - **Date:** <span class="md-typeset-planned">YYYY-MM-DD</span>
-- **Author(s):** <span class="md-typeset-planned">List of people who proposed or designed the feature</span>
+- **Author(s):** [João V. Farias](https://github.com/BeyondMagic)
 
 ## Context
 
 <span class="md-typeset-planned">Provide context for what this feature is about, the motivation behind it, and the goal it aims to achieve.</span>
+
+Includes top-bar system status indicators (audio via PipeWire, network, battery/power state, clock, `StatusNotifierItem` tray icons) and an integrated MPRIS media playback control popup (`Quickshell.Services.Mpris`) for controlling active local or streaming media players (such as [Jellybox](https://jellybox.app/) or [Navidrome](https://www.navidrome.org/) clients).
 
 ## Benchmark
 
