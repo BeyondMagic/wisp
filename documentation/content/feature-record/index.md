@@ -21,7 +21,7 @@ High-level state and screen navigation across the shell lifecycle, mapping how t
 | ID  | Date       | Feature                                          | Status       |
 | :-- | :--------- | :----------------------------------------------- | :----------- |
 | 000 | 2026-10-03 | [Template](./000-template.md)                    | **Accepted** |
-| 001 | -          | [Login](./001-login.md)                          | Proposed     |
+| 001 | 2026-10-25 | [Login](./001-login.md)                          | **Accepted** |
 | 002 | -          | [Power Management](./002-power-management.md)    | Proposed     |
 | 003 | 2026-10-24 | [System Tray](./003-system-tray.md)              | **Accepted** |
 | 004 | 2026-10-24 | [Workspace Tray](./004-workspace-tray.md)        | **Accepted** |

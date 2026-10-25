@@ -6,29 +6,102 @@ icon: lucide/lock
 
 # 001: Login
 
-- **Status:** <span class="md-typeset-planned">Proposed</span>
-- **Date:** <span class="md-typeset-planned">YYYY-MM-DD</span>
+- **Status:** **Accepted**
+- **Date:** 2026-10-25
 - **Author(s):** [João V. Farias](https://github.com/BeyondMagic)
 
 ## Context
 
-<span class="md-typeset-planned">Provide context for what this feature is about, the motivation behind it, and the goal it aims to achieve.</span>
+The login screen blocks desktop interaction behind an exclusive Wayland overlay until the user authenticates via PIN/password or a hardware fingerprint scanner. In its standalone form (`source/login.qml`), it captures all keyboard and pointer events across the active display and exits Quickshell upon successful verification.
 
 ## Interaction Flow
 
-<span class="md-typeset-planned">Describe the interaction flow of the feature in a use-case format.</span>
+```mermaid
+flowchart TD
+    Start[Launch Login Overlay] --> CheckFprint[Run fprintd-list $USER]
+    CheckFprint -->|Exit code 0| EnableFprint[Show Fingerprint Indicator & Start Verification]
+    CheckFprint -->|Non-zero| HideFprint[Hide Fingerprint Indicator]
+
+    EnableFprint --> Scanning[State: Scanning - Bottom-to-Top Green Reveal]
+    Scanning -->|VerifyStatus: verify-match| Filled[State: Filled - Solid Green #4ac26b]
+    Scanning -->|VerifyStatus: verify-no-match / retry| Warning[State: Not recognized - Solid Amber #e5c07b]
+    Warning -->|After 1.4s| Scanning
+
+    Start --> FocusPin[Focus PIN Input]
+    FocusPin -->|User presses Enter| PamAuth[Verify against PAM pam.d/qs-login]
+    PamAuth -->|PamResult.Success| Filled
+    PamAuth -->|Failure| PinError[Clear Input, Red Border #ed8d9f, Horizontal Shake]
+    PinError -->|User types again| FocusPin
+
+    Filled --> Exit[Exit Quickshell]
+```
+
+1. **Exclusive Input Capture:**
+   - The window renders on `WlrLayer.Overlay` with `ExclusionMode.Ignore` and `WlrKeyboardFocus.Exclusive`.
+   - Mouse clicks and scroll wheel events outside controls are swallowed, and any stray keystrokes return focus to the PIN input field.
+
+2. **Hardware Fingerprint Detection:**
+   - On startup, the module executes `fprintd-list $USER`.
+   - If the command exits with `0`, fingerprint authentication is enabled: the `36x36` fingerprint indicator appears `10px` to the right of the PIN input and begins verification in parallel with PIN entry.
+   - If the command returns a non-zero exit code, the fingerprint indicator remains hidden and only the centered PIN input is shown.
+
+3. **PIN Authentication & Error Feedback:**
+   - Pressing `Enter` submits the entered secret to `PamContext` (`pam.d/qs-login`).
+   - On failure, the input text is cleared immediately, the `1px` input border transitions to `#ed8d9f` (`status/error`), and the input box plays a horizontal shake animation. Typing again resets the border color to `#fafafa` at 10% opacity.
+
+4. **Fingerprint Visual States:**
+   - **Default:** `36x36` rounded box (`5px` radius, `1px` stroke `#f4f4f5` at 10% opacity) with a `24x24` `#fafafa` fingerprint icon.
+   - **Scanning:** Base `#fafafa` fingerprint overlaid with a bottom-to-top clipped container revealing a counter-translated `#4ac26b` (`status/success`) fingerprint so the icon stays stationary while the green sweep rises and falls.
+   - **Filled:** Full `#4ac26b` fingerprint upon match before exiting Quickshell.
+   - **Not recognized:** Full `#e5c07b` (`status/warning`) fingerprint and `1px` `#e5c07b` border on a failed or incomplete scan, returning to `Scanning` after a short pause.
 
 ## Visual Design
 
-<span class="md-typeset-planned">Provide visual design mockups or wireframes of the feature in Figma.</span>
+- **Figma Design & Motion:** [Desktop - Login (`node-id=44-2059`)](https://www.figma.com/design/GS4qHgJ74LSMKBl9TAcRly/Desktop?node-id=44-2059&m=dev)
 
-- Identify if there is fingerprint authentication support and is enabled in the system, if there is, show a visual indicator of the fingerprint reader and allow the user to use it to authenticate.
+```mermaid
+graph TD
+    subgraph Canvas[Fullscreen Overlay #050505]
+        subgraph Stack[Centered Vertical Stack - 62px Spacing]
+            Avatar[77x77 Circular Avatar + 2px Outside Stroke #09090b]
+            Name[Display Name: BeyondMagic - Gued 36px #60cdea]
+            subgraph InputRow[Input Row - 10px Spacing]
+                PinBox[282x37 PIN Input - 12x12 Key Icon + Inter 12px]
+                FpBox[36x36 Fingerprint Indicator - Conditional]
+            end
+        end
+    end
+```
 
 ## Implementation
+
+### Theme Tokens
+
+| Token                   | Value                        | Usage                                         |
+| :---------------------- | :--------------------------- | :-------------------------------------------- |
+| `background/canvas`     | `#050505`                    | Fullscreen overlay background                 |
+| `border/inverse`        | `#09090b`                    | `2px` outside stroke around the `77x77` avatar |
+| `accent/blue`           | `#60cdea`                    | Display name (`Gued` Regular `36px`)          |
+| `text/primary`          | `#fafafa`                    | PIN input text and base fingerprint icon      |
+| `text/placeholder`      | `rgba(250, 250, 250, 0.60)`  | `"PIN"` placeholder (`Inter` Regular `12px`)  |
+| `border/input`          | `rgba(250, 250, 250, 0.10)`  | Default `1px` inside border on PIN input      |
+| `border/button`         | `rgba(244, 244, 245, 0.10)`  | Default `1px` inside border on Fingerprint    |
+| `status/success`        | `#4ac26b`                    | `Scanning` reveal and `Filled` fingerprint    |
+| `status/warning`        | `#e5c07b`                    | `Not recognized` fingerprint and border       |
+| `status/error`          | `#ed8d9f`                    | PIN input border on failed authentication     |
+
+### Two-Tier Fingerprint Scanner Integration
 
 <!--
 - [ ] Transform [`python-validity`, `fprintd-clients`](https://github.com/vowstar/vowstar-overlay) at commit `a967650c76ac438e05bdca8bd369213ccd7a4f24` ebuild to PKGBUILD.
 - [ ] Transform [`sys-auth/fprintd`](https://anongit.gentoo.org/git/repo/gentoo.git) ebuild to PKGBUILD.
 -->
 
-<span class="md-typeset-planned">Provide a detailed description of how the feature will be implemented, including any technical considerations, dependencies, and potential challenges.</span>
+Fingerprint state tracking uses a two-tier architecture so the UI responds to structured hardware events first while keeping a text-stream fallback:
+
+1. **Primary Target (Method 2: D-Bus Signals):**
+   - Subscribes to the `net.reactivated.Fprint` system bus on object path `/net/reactivated/Fprint/Device/0` (`gdbus monitor --system --dest net.reactivated.Fprint --object-path /net/reactivated/Fprint/Device/0`).
+   - Listens to `VerifyFingerSelected` and `VerifyStatus` signals (`verify-match`, `verify-no-match`, `verify-retry-scan`, `verify-swipe-too-short`, `verify-finger-not-centered`, `verify-remove-and-retry`, `verify-unknown-error`, `verify-disconnected`) to drive `Scanning`, `Filled`, and `Not recognized` transitions directly.
+
+2. **Fallback Target (Method 1: PAM & CLI Text Stream Parsing):**
+   - If the D-Bus signal stream is unavailable, `PamContext.onPamMessage` and the `fprintd-verify` process streams (`SplitParser` on `stdout`/`stderr`) match prompt strings (`"Place your"`, `"Swipe your"`, `"Scanning"`, `"verify-match"`, `"verify-no-match"`, `"Failed"`, `"not recognized"`) to update the indicator state.
