@@ -6,7 +6,7 @@ icon: lucide/command
 
 # 007: Launcher
 
-- **Status:** Proposed
+- **Status:** **Accepted**
 - **Date:** 2026-10-24
 - **Author(s):** [João V. Farias](https://github.com/BeyondMagic)
 
@@ -28,7 +28,7 @@ The launcher is the central keyboard-driven command palette for `WISP`. Rather t
 
 | ID    | Provider / Sub-View                                 | Prefix | Backend / Source                             | Status       |
 | :---- | :-------------------------------------------------- | :----- | :------------------------------------------- | :----------- |
-| 007.1 | [Desktop Applications](./001-desktop-apps.md)       | None   | `Quickshell.DesktopEntries`                  | Planned      |
+| 007.1 | [Desktop Applications](./001-desktop-apps.md)       | None   | `Quickshell.DesktopEntries`                  | **Accepted** |
 | 007.2 | [Collected Words](./002-collected-words.md)         | `>`    | `~/.config/nushell/scripts/quotes.nu`        | **Accepted** |
 | 007.3 | [Emoji and Kaomoji Picker](./003-emojis.md)         | `:`    | `~/.config/nushell/scripts/emojis.nu`        | Planned      |
 | 007.4 | [Service Manager](./004-service-manager.md)         | `>`    | `dinitctl.nu` / Tailscale SSH                | Planned      |
