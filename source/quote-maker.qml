@@ -6,7 +6,7 @@ import Quickshell.Io
 FloatingWindow {
     id: root
 
-    title: "Quote Maker"
+    title: "Collected Words"
     implicitWidth: 472
     implicitHeight: Math.max(444, outerFrame.implicitHeight)
     minimumSize: Qt.size(472, 444)
@@ -336,7 +336,7 @@ FloatingWindow {
                     Text {
                         anchors.left: parent.left
                         anchors.top: parent.top
-                        text: "Quote Maker"
+                        text: "Save a quote"
                         color: root.textPrimary
                         font.family: "Gued"
                         font.pixelSize: 24

@@ -29,7 +29,7 @@ The launcher is the central keyboard-driven command palette for `WISP`. Rather t
 | ID    | Provider / Sub-View                                 | Prefix | Backend / Source                             | Status       |
 | :---- | :-------------------------------------------------- | :----- | :------------------------------------------- | :----------- |
 | 007.1 | [Desktop Applications](./001-desktop-apps.md)       | None   | `Quickshell.DesktopEntries`                  | Planned      |
-| 007.2 | [Quote Maker](./002-quote-maker.md)                 | `>`    | `~/.config/nushell/scripts/quotes.nu`        | **Accepted** |
+| 007.2 | [Collected Words](./002-collected-words.md)         | `>`    | `~/.config/nushell/scripts/quotes.nu`        | **Accepted** |
 | 007.3 | [Emoji and Kaomoji Picker](./003-emojis.md)         | `:`    | `~/.config/nushell/scripts/emojis.nu`        | Planned      |
 | 007.4 | [Service Manager](./004-service-manager.md)         | `>`    | `dinitctl.nu` / Tailscale SSH                | Planned      |
 | 007.5 | [Calculator](./005-calculator.md)                   | `=`    | `qalc` / `libqalculate`                      | Planned      |
@@ -54,7 +54,7 @@ stateDiagram-v2
 2. Typing in the root search filters both desktop applications and built-in sub-views/commands using unified fuzzy matching, while automatically evaluating mathematical expressions inline.
 3. Typing an optional prefix (`:` for emojis/kaomojis, `=` for calculator, `>` for script sub-views, `?` for dictionary) filters directly to that provider.
 4. Pressing `Up` / `Down` or `Tab` / `Shift + Tab` moves selection through the results list.
-5. Pressing `Enter` on a desktop application launches it and closes the launcher. Pressing `Enter` on a sub-view item (such as [Quote Maker](./002-quote-maker.md)) replaces the root list in-place with that sub-view.
+5. Pressing `Enter` on a desktop application launches it and closes the launcher. Pressing `Enter` on a sub-view item (such as [Collected Words](./002-collected-words.md)) replaces the root list in-place with that sub-view.
 6. Pressing `Esc` inside any sub-view pops the navigation stack back to the Root Search view. Pressing `Esc` on the Root Search view (or clicking outside the palette frame) closes the launcher.
 
 ## Visual Design
