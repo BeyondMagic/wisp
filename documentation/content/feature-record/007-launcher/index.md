@@ -6,59 +6,62 @@ icon: lucide/command
 
 # 007: Launcher
 
-- **Status:** <span class="md-typeset-planned">Proposed</span>
-- **Date:** <span class="md-typeset-planned">YYYY-MM-DD</span>
+- **Status:** Proposed
+- **Date:** 2026-10-24
 - **Author(s):** [João V. Farias](https://github.com/BeyondMagic)
 
 ## Context
 
-<span class="md-typeset-planned">Provide context for what this feature is about, the motivation behind it, and the goal it aims to achieve.</span>
-
-Beyond launching desktop applications, the launcher acts as the central keyboard-driven command palette for executing script-backed utilities without dedicated standalone windows:
-
-- **Service Management:** Start, stop, and inspect local (`dinit` / `systemd`) or remote home-server services over [Tailscale](https://tailscale.com/) via SSH/script commands with live status checks.
-- **Screen OCR:** Trigger screen region capture and optical character recognition (`grim` + `slurp` -> `tesseract` / `RapidOCR` / `PaddleOCR` -> `wl-copy`) with completion feedback sent to [005: Notifications](../005-notifications.md).
-- **Quick Utilities:** Mathematical expressions (`qalculate`), dictionary lookup (`dict.nu`), emoji/kaomoji picker, and shell widget toggles.
+The launcher is the central keyboard-driven command palette for `WISP`. Rather than spawning separate standalone utility windows or forcing the user to type repetitive CLI flags in a terminal, it provides a single overlay window that starts on a unified root search and transitions in-place into specialized sub-views.
 
 ## Benchmark
 
-<span class="md-typeset-planned">Provide examples of this feature implemented by other developers or in similar applications, with leading features highlighted.</span>
-
 ### [PowerToys Command Palette](https://learn.microsoft.com/en-us/windows/powertoys/command-palette/overview)
 
-![alt text](./assets/cmdpal-overview1.gif)
+![PowerToys Command Palette](./assets/cmdpal-overview1.gif)
 
 ### [PowerToys Run utility](https://learn.microsoft.com/en-us/windows/powertoys/run)
 
-![alt text](./assets/powerrun-demo.gif)
+![PowerToys Run](./assets/powerrun-demo.gif)
+
+## Sub-Views and Providers
+
+| ID    | Provider / Sub-View                                 | Prefix | Backend / Source                             | Status       |
+| :---- | :-------------------------------------------------- | :----- | :------------------------------------------- | :----------- |
+| 007.1 | [Desktop Applications](./001-desktop-apps.md)       | None   | `Quickshell.DesktopEntries`                  | Planned      |
+| 007.2 | [Quote Maker](./002-quote-maker.md)                 | `>`    | `~/.config/nushell/scripts/quotes.nu`        | **Accepted** |
+| 007.3 | [Emoji and Kaomoji Picker](./003-emojis.md)         | `:`    | `~/.config/nushell/scripts/emojis.nu`        | Planned      |
+| 007.4 | [Service Manager](./004-service-manager.md)         | `>`    | `dinitctl.nu` / Tailscale SSH                | Planned      |
+| 007.5 | [Calculator](./005-calculator.md)                   | `=`    | `qalc` / `libqalculate`                      | Planned      |
+| 007.6 | [Wallpaper Picker](./006-wallpaper-picker.md)       | `>`    | `~/.config/nushell/scripts/wallpaper.nu`     | Planned      |
+| 007.7 | [Screen OCR](./007-ocr.md)                          | `>`    | `grim` + `slurp` + `tesseract` / `RapidOCR`  | Planned      |
+| 007.8 | [Dictionary](./008-dictionary.md)                   | `?`    | `dict.nu`                                    | Planned      |
 
 ## Interaction Flow
 
-<span class="md-typeset-planned">Describe the interaction flow of the feature in a use-case format.</span>
+```mermaid
+stateDiagram-v2
+    [*] --> Closed
+    Closed --> RootSearch: Meta + D (Reset query)
+    RootSearch --> Closed: Esc / Click outside
+    RootSearch --> Closed: Enter on Desktop App / Action
+    RootSearch --> SubView: Enter on Sub-View item or Prefix (: / > / =)
+    SubView --> RootSearch: Esc (Pop view stack)
+    SubView --> Closed: Action completed (Save / Copy / Apply)
+```
 
-1. `Meta key` + `D` triggers the launcher to open.
-
-<!--
-
-enable/disable dinit services (this can be just predefined commands, but with a check before showing which one)
-start/stop remote home-server services over Tailscale
-run screen OCR (grim -> tesseract/PaddleOCR/RapidOCR -> wl-copy)
-manage other widgets (can be predefined commands).
-run extensible predefined commands:
-    get dictionary from word, like dict.nu
-    list emoji, kaomojis
-calculate mathematical expressions using Qalculate:
-    set up own service (libcalculate running on background with Quickshell and only read commands when sent to it)
-run desktop apps.
-Make schema.
-Change from JSON to TOML with additional script.
-
--->
+1. Pressing `Meta + D` opens the centered overlay on the active monitor, resets the view stack to the **Root Search** view, clears any prior query, and focuses the search input.
+2. Typing in the root search filters both desktop applications and built-in sub-views/commands using unified fuzzy matching, while automatically evaluating mathematical expressions inline.
+3. Typing an optional prefix (`:` for emojis/kaomojis, `=` for calculator, `>` for script sub-views, `?` for dictionary) filters directly to that provider.
+4. Pressing `Up` / `Down` or `Tab` / `Shift + Tab` moves selection through the results list.
+5. Pressing `Enter` on a desktop application launches it and closes the launcher. Pressing `Enter` on a sub-view item (such as [Quote Maker](./002-quote-maker.md)) replaces the root list in-place with that sub-view.
+6. Pressing `Esc` inside any sub-view pops the navigation stack back to the Root Search view. Pressing `Esc` on the Root Search view (or clicking outside the palette frame) closes the launcher.
 
 ## Visual Design
 
-<span class="md-typeset-planned">Provide visual design mockups or wireframes of the feature in Figma.</span>
+<span class="md-typeset-planned">Provide visual design mockups or wireframes of the root command palette frame in Figma.</span>
 
 ## Implementation
 
-<span class="md-typeset-planned">Provide a detailed description of how the feature will be implemented, including any technical considerations, dependencies, and potential challenges.</span>
+- **Window Layer:** Resident `PanelWindow` on the Wayland `WlrLayerShell` Overlay layer (`visible` toggled via IPC/shortcut for `0ms` popup latency) with exclusive keyboard focus while visible.
+- **View Stack:** A central `StackLayout` or `Loader` inside the launcher container switches between the root search list and the active sub-view component without creating new Wayland windows.

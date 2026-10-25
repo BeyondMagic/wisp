@@ -35,7 +35,17 @@ nav = [
       { "004: Workspace Tray" = "feature-record/004-workspace-tray.md" },
       { "005: Notifications" = "feature-record/005-notifications.md" },
       { "006: Overview" = "feature-record/006-overview.md" },
-      { "007: Launcher" = "feature-record/007-launcher/index.md" },
+      { "007: Launcher" = [
+          { "General" = "feature-record/007-launcher/index.md" },
+          { "007.1: Desktop Apps" = "feature-record/007-launcher/001-desktop-apps.md" },
+          { "007.2: Quote Maker" = "feature-record/007-launcher/002-quote-maker.md" },
+          { "007.3: Emojis" = "feature-record/007-launcher/003-emojis.md" },
+          { "007.4: Service Manager" = "feature-record/007-launcher/004-service-manager.md" },
+          { "007.5: Calculator" = "feature-record/007-launcher/005-calculator.md" },
+          { "007.6: Wallpaper Picker" = "feature-record/007-launcher/006-wallpaper-picker.md" },
+          { "007.7: Screen OCR" = "feature-record/007-launcher/007-ocr.md" },
+          { "007.8: Dictionary" = "feature-record/007-launcher/008-dictionary.md" },
+      ]},
   ]},
   { "Decision Record" = [
       { "General" = "decision-record/index.md" },

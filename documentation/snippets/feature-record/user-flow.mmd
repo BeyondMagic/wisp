@@ -14,7 +14,18 @@ flowchart TD
     subgraph Overlays ["Modal Overlays"]
         F002["002: Power Management"]
         F006["006: Overview"]
-        F007["007: Launcher (Apps, Services, OCR, Calc)"]
+        F007["007: Launcher (Root Search)"]
+    end
+
+    subgraph LauncherViews ["007: Launcher Sub-Views & Providers"]
+        L1["007.1: Desktop Apps"]
+        L2["007.2: Quote Maker"]
+        L3["007.3: Emojis & Kaomojis"]
+        L4["007.4: Service Manager"]
+        L5["007.5: Calculator"]
+        L6["007.6: Wallpaper Picker"]
+        L7["007.7: Screen OCR"]
+        L8["007.8: Dictionary"]
     end
 
     Home --> F003
@@ -25,5 +36,15 @@ flowchart TD
     Home --> F006
     Home --> F007
 
+    F007 --> L1
+    F007 --> L2
+    F007 --> L3
+    F007 --> L4
+    F007 --> L5
+    F007 --> L6
+    F007 --> L7
+    F007 --> L8
+
     F002 -->|Lock| F001
     F004 -->|Expand| F006
+    L7 -->|Copy & Notify| F005
