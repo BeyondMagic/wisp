@@ -13,6 +13,7 @@ Rectangle {
     property alias quotationsModel: quotationsModel
     property alias authorsModel: authorsModel
     property alias sourcesModel: sourcesModel
+    property alias databaseDropdown: databaseDropdown
 
     implicitWidth: 472
     implicitHeight: innerFrame.implicitHeight + 20

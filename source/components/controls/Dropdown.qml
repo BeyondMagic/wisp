@@ -1,5 +1,6 @@
 import QtQuick
 import QtQuick.Layouts
+import Quickshell
 import qs.config
 import qs.utils
 
@@ -150,66 +151,88 @@ Item {
         }
     }
 
-    // Dropdown popup
-    Rectangle {
-        id: menuPopup
-        visible: root.isOpen
-        anchors.top: triggerBox.bottom
-        anchors.topMargin: 4
-        anchors.left: parent.left
-        anchors.right: parent.right
-        implicitHeight: optionsColumn.implicitHeight + 8
-        color: Theme.bgSurface
-        border.width: 1
-        border.color: Theme.borderInput
-        z: 1000
+    onIsOpenChanged: {
+        if (isOpen) {
+            menuPopup.anchor.updateAnchor();
+        }
+    }
 
-        Column {
-            id: optionsColumn
+    onActiveFocusChanged: {
+        if (!activeFocus) {
+            root.close();
+        }
+    }
+
+    // Dropdown popup window (floats outside window bounds via Quickshell PopupWindow)
+    PopupWindow {
+        id: menuPopup
+        anchor.item: triggerBox
+        anchor.edges: Edges.Bottom | Edges.Left
+        anchor.gravity: Edges.Bottom | Edges.Right
+        visible: root.isOpen
+        implicitWidth: triggerBox.width
+        implicitHeight: popupContent.implicitHeight + 4
+        color: "transparent"
+
+        Rectangle {
+            id: popupContent
             anchors.left: parent.left
             anchors.right: parent.right
             anchors.top: parent.top
             anchors.topMargin: 4
+            implicitHeight: optionsColumn.implicitHeight + 8
+            color: Theme.bgSurface
+            border.width: 1
+            border.color: Theme.borderInput
+            radius: 4
 
-            Repeater {
-                model: root.model
+            Column {
+                id: optionsColumn
+                anchors.left: parent.left
+                anchors.right: parent.right
+                anchors.top: parent.top
+                anchors.topMargin: 4
 
-                delegate: Rectangle {
-                    id: delegateItem
-                    width: optionsColumn.width
-                    height: 32
-                    color: itemArea.containsMouse ? Qt.rgba(Theme.textPrimary.r, Theme.textPrimary.g, Theme.textPrimary.b, 0.08) : "transparent"
+                Repeater {
+                    model: root.model
 
-                    readonly property var rawData: modelData
-                    readonly property string labelText: {
-                        if (typeof rawData === "string")
-                            return rawData;
-                        return rawData[root.itemTextProperty] || "";
-                    }
+                    delegate: Rectangle {
+                        id: delegateItem
+                        width: optionsColumn.width
+                        height: 32
+                        color: itemArea.containsMouse ? Qt.rgba(Theme.textPrimary.r, Theme.textPrimary.g, Theme.textPrimary.b, 0.08) : "transparent"
 
-                    Text {
-                        anchors.left: parent.left
-                        anchors.right: parent.right
-                        anchors.leftMargin: 12
-                        anchors.rightMargin: 12
-                        anchors.verticalCenter: parent.verticalCenter
-                        text: delegateItem.labelText
-                        color: index === root.selectedIndex ? Theme.accentBlue : Theme.textPrimary
-                        font.family: Theme.fontSans
-                        font.pixelSize: 12
-                        font.weight: index === root.selectedIndex ? Font.DemiBold : Font.Normal
-                        elide: Text.ElideRight
-                    }
+                        readonly property var rawData: modelData
+                        readonly property string labelText: {
+                            if (typeof rawData === "string")
+                                return rawData;
+                            return rawData[root.itemTextProperty] || "";
+                        }
 
-                    MouseArea {
-                        id: itemArea
-                        anchors.fill: parent
-                        hoverEnabled: true
-                        cursorShape: Qt.PointingHandCursor
-                        onClicked: {
-                            root.selectedIndex = index;
-                            root.isOpen = false;
-                            root.selected(index, rawData);
+                        Text {
+                            anchors.left: parent.left
+                            anchors.right: parent.right
+                            anchors.leftMargin: 12
+                            anchors.rightMargin: 12
+                            anchors.verticalCenter: parent.verticalCenter
+                            text: delegateItem.labelText
+                            color: index === root.selectedIndex ? Theme.accentBlue : Theme.textPrimary
+                            font.family: Theme.fontSans
+                            font.pixelSize: 12
+                            font.weight: index === root.selectedIndex ? Font.DemiBold : Font.Normal
+                            elide: Text.ElideRight
+                        }
+
+                        MouseArea {
+                            id: itemArea
+                            anchors.fill: parent
+                            hoverEnabled: true
+                            cursorShape: Qt.PointingHandCursor
+                            onClicked: {
+                                root.selectedIndex = index;
+                                root.isOpen = false;
+                                root.selected(index, rawData);
+                            }
                         }
                     }
                 }
