@@ -8,7 +8,7 @@ Rectangle {
 
     property string text: ""
     property string iconSvg: ""
-    property string variant: "primary" // "primary" | "secondary" | "outline" | "icon"
+    property string variant: "primary" // "primary" | "secondary" | "outline" | "icon" | "destructive"
     property bool loading: false
     property alias cursorShape: mouseArea.cursorShape
     property int paddingHorizontal: 16
@@ -28,6 +28,13 @@ Rectangle {
         if (variant === "primary") {
             return mouseArea.pressed ? Qt.darker(Theme.actionPrimaryBg, 1.15)
                  : (mouseArea.containsMouse ? Qt.lighter(Theme.actionPrimaryBg, 1.1) : Theme.actionPrimaryBg);
+        }
+        if (variant === "destructive") {
+            return mouseArea.pressed
+                ? Qt.rgba(Theme.statusError.r, Theme.statusError.g, Theme.statusError.b, 0.35)
+                : (mouseArea.containsMouse
+                    ? Qt.rgba(Theme.statusError.r, Theme.statusError.g, Theme.statusError.b, 0.30)
+                    : Qt.rgba(Theme.statusError.r, Theme.statusError.g, Theme.statusError.b, 0.25));
         }
         if (variant === "secondary" || variant === "icon") {
             return mouseArea.pressed ? Qt.rgba(Theme.textPrimary.r, Theme.textPrimary.g, Theme.textPrimary.b, 0.15)
@@ -64,10 +71,16 @@ Rectangle {
             visible: root.text.length > 0
             Layout.alignment: Qt.AlignVCenter
             text: root.text
-            color: root.variant === "primary" ? Theme.actionPrimaryFg : Theme.textPrimary
+            color: {
+                if (root.variant === "primary")
+                    return Theme.actionPrimaryFg;
+                if (root.variant === "destructive")
+                    return Theme.statusError;
+                return Theme.textPrimary;
+            }
             font.family: Theme.fontSans
             font.pixelSize: 12
-            font.weight: Font.Medium
+            font.bold: true
         }
     }
 

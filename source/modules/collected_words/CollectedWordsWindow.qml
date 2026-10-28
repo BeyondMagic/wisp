@@ -7,8 +7,8 @@ FloatingWindow {
 
     title: "Collected Words"
     implicitWidth: 472
-    implicitHeight: Math.max(444, view.implicitHeight)
-    minimumSize: Qt.size(472, 444)
+    implicitHeight: Math.max(407, view.implicitHeight)
+    minimumSize: Qt.size(472, 407)
     visible: true
     color: "transparent"
 

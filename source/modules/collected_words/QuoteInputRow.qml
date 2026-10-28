@@ -10,6 +10,7 @@ Item {
     property string placeholder: ""
     property string textValue: ""
     property bool canRemove: false
+    property bool withAction: true
 
     signal textEdited(string newText)
     signal addRequested()
@@ -24,6 +25,7 @@ Item {
     Controls.TextInput {
         id: inputField
         anchors.fill: parent
+        type: root.withAction ? "With action" : "Default"
         iconSvg: root.iconSvg
         placeholder: root.placeholder
         text: root.textValue
@@ -33,6 +35,10 @@ Item {
             if (newText !== root.textValue) {
                 root.textEdited(newText);
             }
+        }
+
+        onActionClicked: {
+            root.addRequested();
         }
 
         onReturnPressed: function(event) {
@@ -49,5 +55,9 @@ Item {
                 root.removeRequested();
             }
         }
+    }
+
+    function forceActiveFocus() {
+        inputField.forceActiveFocus();
     }
 }

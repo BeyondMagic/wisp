@@ -39,7 +39,7 @@ Designed in Figma (`Desktop` -> `Features` -> section `133:263` **Collected Word
 
 ## Implementation
 
-- **Source File:** Implemented in `source/quote-maker.qml`.
+- **Source Files:** Implemented in [`source/modules/collected_words/CollectedWordsView.qml`](file:///home/terra/projects/wisp/source/modules/collected_words/CollectedWordsView.qml), [`source/modules/collected_words/QuoteInputRow.qml`](file:///home/terra/projects/wisp/source/modules/collected_words/QuoteInputRow.qml), and [`source/modules/collected_words/CollectedWordsWindow.qml`](file:///home/terra/projects/wisp/source/modules/collected_words/CollectedWordsWindow.qml) with the entry point [`source/collected-words.qml`](file:///home/terra/projects/wisp/source/collected-words.qml). Backend execution is isolated in [`source/services/QuotesService.qml`](file:///home/terra/projects/wisp/source/services/QuotesService.qml).
 - **Databases (`~/storage/desktop/quotes/`):**
   - `general.json` (`General`)
   - `personal.json` (`Personal`)
