@@ -16,6 +16,10 @@ Item {
     signal addRequested()
     signal removeRequested()
     signal saveRequested()
+    signal navigateUp()
+    signal navigateDown()
+    signal navigateNext()
+    signal navigatePrev()
 
     implicitWidth: 400
     implicitHeight: inputField.implicitHeight
@@ -42,6 +46,11 @@ Item {
             root.addRequested();
         }
 
+        onNavigateUp: root.navigateUp()
+        onNavigateDown: root.navigateDown()
+        onNavigateNext: root.navigateNext()
+        onNavigatePrev: root.navigatePrev()
+
         onReturnPressed: function(event) {
             if (event.modifiers & Qt.ControlModifier) {
                 root.saveRequested();
@@ -58,7 +67,7 @@ Item {
         }
     }
 
-    function forceActiveFocus() {
-        inputField.forceActiveFocus();
+    function forceActiveFocus(fromDirection) {
+        inputField.forceActiveFocus(fromDirection);
     }
 }

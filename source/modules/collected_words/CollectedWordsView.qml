@@ -43,6 +43,136 @@ Rectangle {
         return n + (s[(v - 20) % 10] || s[v] || s[0]);
     }
 
+    function addQuotation() {
+        quotationsModel.append({ value: "" });
+        Qt.callLater(function() {
+            const item = quotationsRepeater.itemAt(quotationsModel.count - 1);
+            if (item) item.forceActiveFocus("down");
+        });
+    }
+
+    function removeQuotation(index) {
+        if (quotationsModel.count > 1) {
+            const focusIdx = Math.max(0, index - 1);
+            quotationsModel.remove(index);
+            Qt.callLater(function() {
+                const item = quotationsRepeater.itemAt(focusIdx);
+                if (item) item.forceActiveFocus("up");
+            });
+        }
+    }
+
+    function addAuthor() {
+        authorsModel.append({ value: "" });
+        Qt.callLater(function() {
+            const item = authorsRepeater.itemAt(authorsModel.count - 1);
+            if (item) item.forceActiveFocus("down");
+        });
+    }
+
+    function removeAuthor(index) {
+        if (authorsModel.count > 1) {
+            const focusIdx = Math.max(0, index - 1);
+            authorsModel.remove(index);
+            Qt.callLater(function() {
+                const item = authorsRepeater.itemAt(focusIdx);
+                if (item) item.forceActiveFocus("up");
+            });
+        }
+    }
+
+    function addSource() {
+        sourcesModel.append({ value: "" });
+        Qt.callLater(function() {
+            const item = sourcesRepeater.itemAt(sourcesModel.count - 1);
+            if (item) item.forceActiveFocus("down");
+        });
+    }
+
+    function removeSource(index) {
+        if (sourcesModel.count > 1) {
+            const focusIdx = Math.max(0, index - 1);
+            sourcesModel.remove(index);
+            Qt.callLater(function() {
+                const item = sourcesRepeater.itemAt(focusIdx);
+                if (item) item.forceActiveFocus("up");
+            });
+        }
+    }
+
+    function getFocusChain() {
+        const list = [];
+        for (let i = 0; i < quotationsRepeater.count; i++) {
+            const item = quotationsRepeater.itemAt(i);
+            if (item) list.push(item);
+        }
+        for (let i = 0; i < authorsRepeater.count; i++) {
+            const item = authorsRepeater.itemAt(i);
+            if (item) list.push(item);
+        }
+        for (let i = 0; i < sourcesRepeater.count; i++) {
+            const item = sourcesRepeater.itemAt(i);
+            if (item) list.push(item);
+        }
+        if (dateRow) list.push(dateRow);
+        if (databaseDropdown) list.push(databaseDropdown);
+        if (saveButton) list.push(saveButton);
+        if (cancelButton) list.push(cancelButton);
+        return list;
+    }
+
+    function focusNext(fromItem) {
+        const chain = getFocusChain();
+        const idx = chain.indexOf(fromItem);
+        if (idx >= 0) {
+            const nextIdx = (idx + 1) % chain.length;
+            chain[nextIdx].forceActiveFocus("down");
+        } else if (chain.length > 0) {
+            chain[0].forceActiveFocus("down");
+        }
+    }
+
+    function focusPrev(fromItem) {
+        const chain = getFocusChain();
+        const idx = chain.indexOf(fromItem);
+        if (idx >= 0) {
+            const prevIdx = (idx - 1 + chain.length) % chain.length;
+            chain[prevIdx].forceActiveFocus("up");
+        } else if (chain.length > 0) {
+            chain[chain.length - 1].forceActiveFocus("up");
+        }
+    }
+
+    function navigateArrowDown(fromItem) {
+        const chain = getFocusChain();
+        const idx = chain.indexOf(fromItem);
+        if (idx >= 0 && idx < chain.length - 1) {
+            if (fromItem === saveButton || fromItem === cancelButton) {
+                return;
+            }
+            chain[idx + 1].forceActiveFocus("down");
+        }
+    }
+
+    function navigateArrowUp(fromItem) {
+        const chain = getFocusChain();
+        const idx = chain.indexOf(fromItem);
+        if (idx > 0) {
+            if (fromItem === cancelButton) {
+                databaseDropdown.forceActiveFocus();
+                return;
+            }
+            chain[idx - 1].forceActiveFocus("up");
+        }
+    }
+
+    Component.onCompleted: {
+        Qt.callLater(function() {
+            const first = quotationsRepeater.itemAt(0);
+            if (first) first.forceActiveFocus();
+        });
+    }
+
     function resetForm() {
         quotationsModel.clear();
         quotationsModel.append({ value: "" });
@@ -51,6 +181,10 @@ Rectangle {
         sourcesModel.clear();
         sourcesModel.append({ value: "" });
         quoteTime = "";
+        Qt.callLater(function() {
+            const first = quotationsRepeater.itemAt(0);
+            if (first) first.forceActiveFocus();
+        });
     }
 
     function collectNonEmpty(model) {
@@ -138,8 +272,10 @@ Rectangle {
 
             // 1. Quotations section (Node 133:268 "Input Text", Type="With action")
             Repeater {
+                id: quotationsRepeater
                 model: quotationsModel
                 delegate: QuoteInputRow {
+                    id: quoteRow
                     required property int index
                     required property string value
                     Layout.alignment: Qt.AlignHCenter
@@ -151,16 +287,22 @@ Rectangle {
                     onTextEdited: function(newText) {
                         quotationsModel.setProperty(index, "value", newText);
                     }
-                    onAddRequested: quotationsModel.append({ value: "" })
-                    onRemoveRequested: quotationsModel.remove(index)
+                    onAddRequested: root.addQuotation()
+                    onRemoveRequested: root.removeQuotation(index)
                     onSaveRequested: root.submitQuote()
+                    onNavigateNext: root.focusNext(quoteRow)
+                    onNavigatePrev: root.focusPrev(quoteRow)
+                    onNavigateDown: root.navigateArrowDown(quoteRow)
+                    onNavigateUp: root.navigateArrowUp(quoteRow)
                 }
             }
 
             // 2. Authors section (Node 133:271 "Input Text", Type="With action")
             Repeater {
+                id: authorsRepeater
                 model: authorsModel
                 delegate: QuoteInputRow {
+                    id: authorRow
                     required property int index
                     required property string value
                     Layout.alignment: Qt.AlignHCenter
@@ -172,16 +314,22 @@ Rectangle {
                     onTextEdited: function(newText) {
                         authorsModel.setProperty(index, "value", newText);
                     }
-                    onAddRequested: authorsModel.append({ value: "" })
-                    onRemoveRequested: authorsModel.remove(index)
+                    onAddRequested: root.addAuthor()
+                    onRemoveRequested: root.removeAuthor(index)
                     onSaveRequested: root.submitQuote()
+                    onNavigateNext: root.focusNext(authorRow)
+                    onNavigatePrev: root.focusPrev(authorRow)
+                    onNavigateDown: root.navigateArrowDown(authorRow)
+                    onNavigateUp: root.navigateArrowUp(authorRow)
                 }
             }
 
             // 3. Sources section (Node 133:274 "Input Text", Type="With action")
             Repeater {
+                id: sourcesRepeater
                 model: sourcesModel
                 delegate: QuoteInputRow {
+                    id: sourceRow
                     required property int index
                     required property string value
                     Layout.alignment: Qt.AlignHCenter
@@ -193,14 +341,19 @@ Rectangle {
                     onTextEdited: function(newText) {
                         sourcesModel.setProperty(index, "value", newText);
                     }
-                    onAddRequested: sourcesModel.append({ value: "" })
-                    onRemoveRequested: sourcesModel.remove(index)
+                    onAddRequested: root.addSource()
+                    onRemoveRequested: root.removeSource(index)
                     onSaveRequested: root.submitQuote()
+                    onNavigateNext: root.focusNext(sourceRow)
+                    onNavigatePrev: root.focusPrev(sourceRow)
+                    onNavigateDown: root.navigateArrowDown(sourceRow)
+                    onNavigateUp: root.navigateArrowUp(sourceRow)
                 }
             }
 
             // 4. Date field (Node 136:329 "Input Text", Type="Default")
             QuoteInputRow {
+                id: dateRow
                 Layout.alignment: Qt.AlignHCenter
                 withAction: false
                 iconSvg: Icons.calendar(Theme.textPrimary, 0.6)
@@ -211,10 +364,15 @@ Rectangle {
                     root.quoteTime = newText;
                 }
                 onSaveRequested: root.submitQuote()
+                onNavigateNext: root.focusNext(dateRow)
+                onNavigatePrev: root.focusPrev(dateRow)
+                onNavigateDown: root.navigateArrowDown(dateRow)
+                onNavigateUp: root.navigateArrowUp(dateRow)
             }
 
             // 5. Database Select Dropdown (Node 133:277 "Input Select")
             Controls.Dropdown {
+                id: databaseDropdown
                 Layout.alignment: Qt.AlignHCenter
                 Layout.preferredWidth: 400
                 model: QuotesService.databases
@@ -224,6 +382,10 @@ Rectangle {
                 onSelected: function(idx, item) {
                     QuotesService.selectedDatabaseIndex = idx;
                 }
+                onNavigateNext: root.focusNext(databaseDropdown)
+                onNavigatePrev: root.focusPrev(databaseDropdown)
+                onNavigateDown: saveButton.forceActiveFocus()
+                onNavigateUp: dateRow.forceActiveFocus("up")
             }
 
             // 6. Footer Buttons Row (Node 133:278 "Frame 1636": width 400, height 46, space between)
@@ -234,6 +396,7 @@ Rectangle {
 
                 // Save button (Node 133:279: 125x25, cornerRadius 5, fill actionPrimaryBg)
                 Controls.Button {
+                    id: saveButton
                     anchors.left: parent.left
                     anchors.leftMargin: 5
                     anchors.top: parent.top
@@ -245,10 +408,15 @@ Rectangle {
                     variant: "primary"
                     loading: QuotesService.saving
                     onClicked: root.submitQuote()
+                    onNavigateNext: root.focusNext(saveButton)
+                    onNavigatePrev: root.focusPrev(saveButton)
+                    onNavigateRight: cancelButton.forceActiveFocus()
+                    onNavigateUp: databaseDropdown.forceActiveFocus()
                 }
 
                 // Cancel / Destructive button (Node 133:280: 125x25, cornerRadius 5, variant Destructive)
                 Controls.Button {
+                    id: cancelButton
                     anchors.right: parent.right
                     anchors.rightMargin: 5
                     anchors.top: parent.top
@@ -262,6 +430,10 @@ Rectangle {
                         QuotesService.statusMessage = "";
                         root.resetForm();
                     }
+                    onNavigateNext: root.focusNext(cancelButton)
+                    onNavigatePrev: root.focusPrev(cancelButton)
+                    onNavigateLeft: saveButton.forceActiveFocus()
+                    onNavigateUp: databaseDropdown.forceActiveFocus()
                 }
             }
         }

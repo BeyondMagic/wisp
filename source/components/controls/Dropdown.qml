@@ -12,7 +12,13 @@ Item {
     property string itemTextProperty: "label"
     property bool isOpen: false
 
+    activeFocusOnTab: true
+
     signal selected(int index, var item)
+    signal navigateUp()
+    signal navigateDown()
+    signal navigateNext()
+    signal navigatePrev()
 
     implicitWidth: 400
     implicitHeight: 37
@@ -34,8 +40,12 @@ Item {
         anchors.right: parent.right
         height: 37
         color: "transparent"
-        border.width: 1
-        border.color: root.isOpen ? Theme.borderFocus : Theme.borderInput
+        border.width: root.activeFocus ? 1.5 : 1
+        border.color: (root.isOpen || root.activeFocus) ? Theme.borderFocus : Theme.borderInput
+
+        Behavior on border.color {
+            ColorAnimation { duration: 150 }
+        }
 
         RowLayout {
             anchors.fill: parent
@@ -81,8 +91,62 @@ Item {
             anchors.fill: parent
             cursorShape: Qt.PointingHandCursor
             onClicked: {
+                root.forceActiveFocus();
                 root.isOpen = !root.isOpen;
             }
+        }
+    }
+
+    Keys.onTabPressed: function(event) {
+        event.accepted = true;
+        root.close();
+        root.navigateNext();
+    }
+
+    Keys.onBacktabPressed: function(event) {
+        event.accepted = true;
+        root.close();
+        root.navigatePrev();
+    }
+
+    Keys.onSpacePressed: function(event) {
+        event.accepted = true;
+        root.isOpen = !root.isOpen;
+    }
+
+    Keys.onReturnPressed: function(event) {
+        event.accepted = true;
+        root.isOpen = !root.isOpen;
+    }
+
+    Keys.onEscapePressed: function(event) {
+        if (root.isOpen) {
+            event.accepted = true;
+            root.close();
+        }
+    }
+
+    Keys.onDownPressed: function(event) {
+        event.accepted = true;
+        if (root.isOpen) {
+            if (root.model && root.selectedIndex < root.model.length - 1) {
+                root.selectedIndex++;
+                root.selected(root.selectedIndex, root.currentItem);
+            }
+        } else {
+            root.navigateDown();
+        }
+    }
+
+    Keys.onUpPressed: function(event) {
+        event.accepted = true;
+        if (root.isOpen) {
+            if (root.selectedIndex > 0) {
+                root.selectedIndex--;
+                root.selected(root.selectedIndex, root.currentItem);
+            }
+        } else {
+            root.navigateUp();
         }
     }
 

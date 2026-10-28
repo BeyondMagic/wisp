@@ -47,6 +47,10 @@ Rectangle {
     signal returnPressed(var event)
     signal textEdited(string newText)
     signal keyPressed(var event)
+    signal navigateUp()
+    signal navigateDown()
+    signal navigateNext()
+    signal navigatePrev()
 
     implicitWidth: 306
     implicitHeight: Math.max(37, Math.ceil(field.contentHeight) + (padding * 2))
@@ -123,12 +127,38 @@ Rectangle {
                 clip: true
                 selectByMouse: true
 
+                readonly property bool isMultiLine: (field.wrapMode !== QQ.TextInput.NoWrap && field.contentHeight > (field.cursorRectangle.height * 1.5))
+
                 onTextChanged: {
                     root.textEdited(text);
                 }
 
                 onAccepted: {
                     root.accepted();
+                }
+
+                Keys.onUpPressed: function(event) {
+                    if (!isMultiLine || field.cursorRectangle.y <= 2) {
+                        event.accepted = true;
+                        root.navigateUp();
+                    }
+                }
+
+                Keys.onDownPressed: function(event) {
+                    if (!isMultiLine || (field.cursorRectangle.y + field.cursorRectangle.height) >= (field.contentHeight - 2)) {
+                        event.accepted = true;
+                        root.navigateDown();
+                    }
+                }
+
+                Keys.onTabPressed: function(event) {
+                    event.accepted = true;
+                    root.navigateNext();
+                }
+
+                Keys.onBacktabPressed: function(event) {
+                    event.accepted = true;
+                    root.navigatePrev();
                 }
 
                 Keys.onReturnPressed: function(event) {
@@ -187,8 +217,13 @@ Rectangle {
         }
     }
 
-    function forceActiveFocus() {
+    function forceActiveFocus(fromDirection) {
         field.forceActiveFocus();
+        if (fromDirection === "up") {
+            field.cursorPosition = field.text.length;
+        } else if (fromDirection === "down") {
+            field.cursorPosition = 0;
+        }
     }
 
     function clear() {

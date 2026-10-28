@@ -18,12 +18,12 @@ Adding and editing multi-line quotes, authors, sources, and dates in the local J
 
 ### Save a Quote (`133:264`)
 
-1. Open the launcher (`Meta + D`) and select **Collected Words** (or type `quote` / `words` and press `Enter`).
+1. Open the launcher (`Meta + D`) and select **Collected Words** (or type `quote` / `words` and press `Enter`). The first quotation input automatically receives focus.
 2. Enter the first quotation line in the `1st quotation` input field. Long lines wrap automatically and expand the row height.
-3. Press `Enter` inside a quotation, author, or source field (or click its `+` button) to append a `2nd`, `3rd`, etc. row for multi-line quotes or multiple authors/sources.
-4. Press `Backspace` on an empty additional row (or click `×`) to remove it.
-5. Optionally enter a creation date (`Date (YYYY-MM-DD, optional)`) and select the target database (`General`, `Personal`, `TV`, `Books`, `Music`, or `Story`).
-6. Press `Ctrl + Enter` or click **Save** to execute `quotes add` via Nushell. On success, the form resets and displays confirmation feedback. Clicking **Cancel** resets all fields, and pressing `Esc` returns to the launcher root view.
+3. Navigate fields using `Tab` / `Shift + Tab` across the full form loop (Quotations, Authors, Sources, Date, Database dropdown, Save, Cancel), or use `Down` / `Up` arrow keys to jump between rows. In wrapped multi-line quotation fields, `Up` and `Down` move the cursor through text lines before jumping to adjacent inputs at the boundaries.
+4. Press `Enter` inside a quotation, author, or source field (or click its `+` button) to append a new row and immediately focus it.
+5. Press `Backspace` on an empty additional row to remove it and return focus to the preceding field.
+6. Press `Ctrl + Enter` from any field or click **Save** (`Space` / `Return` when focused) to execute `quotes add` via Nushell. On success, the form resets and refocuses the first quotation row. Clicking **Cancel** resets all fields, and pressing `Esc` returns to the launcher root view.
 
 ### Edit a Quote (`142:72`)
 

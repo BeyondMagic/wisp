@@ -15,7 +15,15 @@ Rectangle {
     property int paddingVertical: 10
     property int radiusSize: 0
 
+    activeFocusOnTab: true
+
     signal clicked()
+    signal navigateUp()
+    signal navigateDown()
+    signal navigateLeft()
+    signal navigateRight()
+    signal navigateNext()
+    signal navigatePrev()
 
     implicitWidth: Math.max(36, contentRow.implicitWidth + (paddingHorizontal * 2))
     implicitHeight: Math.max(36, contentRow.implicitHeight + (paddingVertical * 2))
@@ -43,11 +51,66 @@ Rectangle {
         return "transparent";
     }
 
-    border.width: (variant === "outline" || variant === "secondary") ? 1 : 0
-    border.color: Theme.borderButton
+    border.width: root.activeFocus ? 1.5 : ((variant === "outline" || variant === "secondary") ? 1 : 0)
+    border.color: root.activeFocus ? Theme.borderFocus : Theme.borderButton
 
     Behavior on color {
         ColorAnimation { duration: 120 }
+    }
+
+    Behavior on border.color {
+        ColorAnimation { duration: 120 }
+    }
+
+    Keys.onSpacePressed: function(event) {
+        if (root.enabled && !root.loading) {
+            event.accepted = true;
+            root.clicked();
+        }
+    }
+
+    Keys.onReturnPressed: function(event) {
+        if (root.enabled && !root.loading) {
+            event.accepted = true;
+            root.clicked();
+        }
+    }
+
+    Keys.onEnterPressed: function(event) {
+        if (root.enabled && !root.loading) {
+            event.accepted = true;
+            root.clicked();
+        }
+    }
+
+    Keys.onTabPressed: function(event) {
+        event.accepted = true;
+        root.navigateNext();
+    }
+
+    Keys.onBacktabPressed: function(event) {
+        event.accepted = true;
+        root.navigatePrev();
+    }
+
+    Keys.onUpPressed: function(event) {
+        event.accepted = true;
+        root.navigateUp();
+    }
+
+    Keys.onDownPressed: function(event) {
+        event.accepted = true;
+        root.navigateDown();
+    }
+
+    Keys.onLeftPressed: function(event) {
+        event.accepted = true;
+        root.navigateLeft();
+    }
+
+    Keys.onRightPressed: function(event) {
+        event.accepted = true;
+        root.navigateRight();
     }
 
     RowLayout {
