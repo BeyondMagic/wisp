@@ -1,22 +1,21 @@
-import Quickshell
 import QtQuick
+import Quickshell
+import qs.modules.login
+import qs.modules.collected_words
 
-FloatingWindow {
-    width: 200
-    height: 100
-    visible: true
-    color: "#222222"
+ShellRoot {
+    id: root
 
-    SystemClock {
-        id: clock
-        precision: SystemClock.Seconds
+    readonly property string activeModule: Quickshell.env("WISP_MODULE") || "login"
+
+    Loader {
+        active: root.activeModule === "login"
+        sourceComponent: LoginWindow {}
     }
 
-    Text {
-        anchors.centerIn: parent
-        text: Qt.formatDateTime(clock.date, "hh:mm:ss")
-        color: "white"
-        font.pixelSize: 24
+    Loader {
+        active: root.activeModule === "collected-words"
+        sourceComponent: CollectedWordsWindow {}
     }
-
 }
+
