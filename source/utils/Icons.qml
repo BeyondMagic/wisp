@@ -75,5 +75,12 @@ Singleton {
         return `<svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">` +
             `<path d="M9 15V9M9 9V3M9 9H15M9 9H3" stroke-width="2" stroke-linecap="round" stroke="${c}" stroke-opacity="${op}"/></svg>`;
     }
+
+    function plus12(color) {
+        const c = color || "#A1A1AA";
+        return `<svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">` +
+            `<path d="M6 12V6M6 6V0M6 6H12M6 6H0" stroke-width="2" stroke-linecap="round" stroke="${c}"/>` +
+            `</svg>`;
+    }
 }
 

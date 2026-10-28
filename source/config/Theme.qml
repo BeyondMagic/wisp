@@ -28,6 +28,7 @@ Singleton {
     readonly property color textPrimary:     darkMode ? "#fafafa" : "#000000"
     readonly property color textPlaceholder: darkMode ? Qt.rgba(0.98, 0.98, 0.98, 0.60) : Qt.rgba(0, 0, 0, 0.60)
     readonly property color textMuted:       darkMode ? Qt.rgba(0.98, 0.98, 0.98, 0.40) : Qt.rgba(0, 0, 0, 0.40)
+    readonly property color iconSubtle:      darkMode ? "#a1a1aa" : "#7f7f88"
 
     // Actions & brand
     readonly property color actionPrimaryBg: darkMode ? "#f4f4f5" : "#171717"
