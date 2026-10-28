@@ -10,6 +10,10 @@ Rectangle {
 
     property bool editMode: false
 
+    property alias quotationsModel: quotationsModel
+    property alias authorsModel: authorsModel
+    property alias sourcesModel: sourcesModel
+
     implicitWidth: 472
     implicitHeight: innerFrame.implicitHeight + 20
     color: Theme.bgCanvas

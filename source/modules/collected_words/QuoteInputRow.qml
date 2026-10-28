@@ -19,6 +19,7 @@ Item {
 
     implicitWidth: 400
     implicitHeight: inputField.implicitHeight
+    height: implicitHeight
     Layout.preferredWidth: 400
     Layout.preferredHeight: implicitHeight
 

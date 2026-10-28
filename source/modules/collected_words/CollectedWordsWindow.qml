@@ -5,10 +5,13 @@ import qs.config
 FloatingWindow {
     id: root
 
+    readonly property int targetHeight: Math.max(407, view.implicitHeight)
+
     title: "Collected Words"
     implicitWidth: 472
-    implicitHeight: Math.max(407, view.implicitHeight)
-    minimumSize: Qt.size(472, 407)
+    implicitHeight: targetHeight
+    minimumSize: Qt.size(472, targetHeight)
+    maximumSize: Qt.size(472, targetHeight)
     visible: true
     color: "transparent"
 
@@ -17,4 +20,3 @@ FloatingWindow {
         anchors.fill: parent
     }
 }
-
