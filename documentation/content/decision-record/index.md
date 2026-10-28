@@ -17,7 +17,7 @@ Technical, architectural, product, and design decisions, along with the reasonin
 | 004 | 2026-10-23 | [Project Name](./004-name.md)                      | Product      | **Accepted** |
 | 005 | 2026-10-18 | [Quality Factors](./005-quality-factors.md)        | Architecture | Proposed     |
 | 006 | 2026-10-03 | [Requirements](./006-requirements.md)              | Product      | **Accepted** |
-| 007 | 2026-10-03 | [Architecture](./007-architecture.md)              | Architecture | Proposed     |
+| 007 | 2026-10-28 | [Architecture](./007-architecture.md)              | Architecture | **Accepted** |
 | 008 | 2026-10-18 | [AI Usage Policy](./008-ai-usage.md)               | Social       | Proposed     |
 | 009 | 2026-09-26 | [Visual Identity and UI](./009-visual-identity.md) | Design       | **Accepted** |
 | 010 | 2026-10-10 | [UX Paradigm and Flows](./010-ux-paradigm.md)      | Design       | Proposed     |
