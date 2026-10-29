@@ -27,7 +27,13 @@ PanelWindow {
         // Redirect stray keystrokes back to loginView input
         Keys.onPressed: function(event) {
             loginView.focusInput();
-            event.accepted = true;
+            if (event.key === Qt.Key_Return || event.key === Qt.Key_Enter) {
+                event.accepted = true;
+                loginView.submitPin();
+            } else if (event.text.length > 0 && event.key !== Qt.Key_Escape) {
+                loginView.pinInput.text += event.text;
+                event.accepted = true;
+            }
         }
 
         // Swallow outside clicks
@@ -45,6 +51,12 @@ PanelWindow {
             id: loginView
             anchors.centerIn: parent
             onLoginSuccess: Qt.quit()
+        }
+
+        Component.onCompleted: {
+            Qt.callLater(function() {
+                loginView.focusInput();
+            });
         }
     }
 }

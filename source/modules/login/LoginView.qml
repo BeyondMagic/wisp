@@ -16,6 +16,7 @@ Column {
     signal loginSuccess()
 
     property bool isError: false
+    property alias pinInput: pinInput
 
     function focusInput() {
         pinInput.forceActiveFocus();
@@ -92,6 +93,7 @@ Column {
                 Controls.TextInput {
                     id: pinInput
                     anchors.fill: parent
+                    focus: true
                     placeholder: "PIN"
                     isPassword: true
                     iconSvg: Icons.key("#F4F4F5")
@@ -105,6 +107,7 @@ Column {
                     }
 
                     onAccepted: root.submitPin()
+                    onReturnPressed: root.submitPin()
 
                     Effects.ShakeEffect {
                         id: shake
@@ -167,7 +170,9 @@ Column {
     }
 
     Component.onCompleted: {
-        pinInput.forceActiveFocus();
+        Qt.callLater(function() {
+            pinInput.forceActiveFocus();
+        });
     }
 }
 

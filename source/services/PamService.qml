@@ -19,7 +19,7 @@ Singleton {
 
     PamContext {
         id: pam
-        configDirectory: "pam.d"
+        configDirectory: "../pam.d"
         config: "qs-login"
 
         onPamMessage: {

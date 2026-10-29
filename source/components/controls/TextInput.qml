@@ -41,6 +41,12 @@ Rectangle {
     property int padding: 10
     property int itemSpacing: 10
 
+    onFocusChanged: {
+        if (focus) {
+            field.forceActiveFocus();
+        }
+    }
+
     // --- Signals ---
     signal actionClicked()
     signal accepted()
@@ -113,6 +119,7 @@ Rectangle {
 
             QQ.TextInput {
                 id: field
+                focus: true
                 anchors.left: parent.left
                 anchors.right: parent.right
                 anchors.verticalCenter: parent.verticalCenter
@@ -163,10 +170,18 @@ Rectangle {
 
                 Keys.onReturnPressed: function(event) {
                     root.returnPressed(event);
+                    if (!event.accepted) {
+                        event.accepted = true;
+                        root.accepted();
+                    }
                 }
 
                 Keys.onEnterPressed: function(event) {
                     root.returnPressed(event);
+                    if (!event.accepted) {
+                        event.accepted = true;
+                        root.accepted();
+                    }
                 }
 
                 Keys.onPressed: function(event) {
