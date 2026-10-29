@@ -12,7 +12,7 @@ icon: lucide/lock
 
 ## Context
 
-The login screen blocks desktop interaction behind an exclusive Wayland overlay until the user authenticates via PIN/password or a hardware fingerprint scanner. In its standalone form (`source/login.qml`), it captures all keyboard and pointer events across the active display and exits Quickshell upon successful verification.
+The login screen blocks desktop interaction behind an exclusive Wayland overlay until the user authenticates via PIN/password or a hardware fingerprint scanner. In its standalone form (`source/login.qml`) or within `source/shell.qml`, it projects fullscreen overlay panels across all connected displays (`Quickshell.screens`) via `Variants`, capturing keyboard and pointer events and exiting Quickshell upon successful verification.
 
 ## Interaction Flow
 
@@ -36,9 +36,11 @@ flowchart TD
     Filled --> Exit[Exit Quickshell]
 ```
 
-1. **Exclusive Input Capture:**
-   - The window renders on `WlrLayer.Overlay` with `ExclusionMode.Ignore` and `WlrKeyboardFocus.Exclusive`.
-   - Mouse clicks and scroll wheel events outside controls are swallowed, and any stray keystrokes return focus to the PIN input field.
+1. **Exclusive Input Capture & Multi-Monitor Support:**
+   - The overlay uses Quickshell `Variants` bound to `Quickshell.screens` to instantiate an overlay `PanelWindow` on every connected monitor.
+   - Each window renders on `WlrLayer.Overlay` with `ExclusionMode.Ignore` and `WlrKeyboardFocus.Exclusive`.
+   - Mouse clicks and scroll wheel events outside controls are swallowed, and stray keystrokes redirect focus to the PIN input field.
+   - PIN entry and authentication error states are synchronized across all screens, allowing input from any active monitor.
 
 2. **Hardware Fingerprint Detection:**
    - On startup, the module executes `fprintd-list $USER`.

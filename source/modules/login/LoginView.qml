@@ -14,6 +14,7 @@ Column {
     spacing: 62
 
     signal loginSuccess()
+    signal pinEdited(string text)
 
     property bool isError: false
     property alias pinInput: pinInput
@@ -104,6 +105,7 @@ Column {
                         if (newText.length > 0 && root.isError) {
                             root.isError = false;
                         }
+                        root.pinEdited(newText);
                     }
 
                     onAccepted: root.submitPin()
