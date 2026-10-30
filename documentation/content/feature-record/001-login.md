@@ -57,6 +57,11 @@ flowchart TD
    - **Filled:** Full `#4ac26b` fingerprint upon match before exiting Quickshell.
    - **Not recognized:** Full `#e5c07b` (`status/warning`) fingerprint and `1px` `#e5c07b` border on a failed or incomplete scan, returning to `Scanning` after a short pause.
 
+5. **Pre-Loaded Startup Lock & Instant Unlock:**
+   - On boot, `getty@tty1` auto-logs in via `/etc/dinit.d/config/agetty-tty1.conf` (`--autologin terra --noclear`), invoking `nu --login` which runs `login.nu` and executes `start-hyprland` on `/dev/tty1`.
+   - At `hyprland.start` (`exec/index.lua`), Hyprland immediately launches `sh -c 'until quickshell -p ~/.config/quickshell/login.qml; do sleep 0.2; done'`, covering all monitors (`Quickshell.screens`) in a crash-safe loop while desktop services (`ags`, `awww-daemon`, `fcitx5`, `xdg-desktop-portal`, `thunderbird`, `beeper`) preload in parallel behind the overlay.
+   - Upon successful PIN or fingerprint verification, `PamService.finishSession()` stops active fingerprint processes and exits Quickshell with code `0` (`Qt.quit()`), terminating the `until` loop and revealing the pre-loaded desktop with zero compositor restart delay.
+
 ## Visual Design
 
 - **Figma Design & Motion:** [Desktop - Login (`node-id=44-2059`)](https://www.figma.com/design/GS4qHgJ74LSMKBl9TAcRly/Desktop?node-id=44-2059&m=dev)

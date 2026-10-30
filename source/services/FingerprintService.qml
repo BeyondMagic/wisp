@@ -178,6 +178,16 @@ Singleton {
         }
     }
 
+    function stopScanning() {
+        restartTimer.stop();
+        if (verifyProcess.running) {
+            verifyProcess.running = false;
+        }
+        if (dbusMonitorProcess.running) {
+            dbusMonitorProcess.running = false;
+        }
+    }
+
     Component.onCompleted: {
         checkProcess.running = true;
     }

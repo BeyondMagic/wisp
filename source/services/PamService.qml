@@ -67,5 +67,9 @@ Singleton {
         _passwordBuffer = password;
         pam.start();
     }
-}
 
+    function finishSession() {
+        FingerprintService.stopScanning();
+        Qt.quit();
+    }
+}

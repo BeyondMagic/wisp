@@ -74,7 +74,7 @@ Variants {
             LoginView {
                 id: loginView
                 anchors.centerIn: parent
-                onLoginSuccess: Qt.quit()
+                onLoginSuccess: PamService.finishSession()
 
                 onPinEdited: function(text) {
                     if (root.sharedPin !== text) {
