@@ -12,6 +12,7 @@ Singleton {
     // State: "Default" | "Scanning" | "Filled" | "Not recognized"
     property string state: "Default"
     property bool dbusSignalReceived: false
+    property bool _isScanningActive: false
 
     signal fingerprintMatched()
     signal fingerprintNotRecognized()
@@ -24,11 +25,13 @@ Singleton {
         onExited: function(exitCode, exitStatus) {
             if (exitCode === 0) {
                 root.hasSupport = true;
+                root._isScanningActive = true;
                 root.state = "Scanning";
                 dbusMonitorProcess.running = true;
                 verifyProcess.running = true;
             } else {
                 root.hasSupport = false;
+                root._isScanningActive = false;
                 root.state = "Default";
             }
         }
@@ -59,15 +62,15 @@ Singleton {
 
         if (text.indexOf("VerifyFingerSelected") !== -1 || text.indexOf("verify-started") !== -1) {
             root.dbusSignalReceived = true;
-            root.state = "Scanning";
+            if (root.state !== "Filled") {
+                root.state = "Scanning";
+            }
             return;
         }
 
         if (text.indexOf("VerifyStatus") !== -1) {
             root.dbusSignalReceived = true;
-            if (text.indexOf("verify-match") !== -1) {
-                root.notifyMatched();
-            } else if (
+            if (
                 text.indexOf("verify-no-match") !== -1 ||
                 text.indexOf("verify-retry-scan") !== -1 ||
                 text.indexOf("verify-swipe-too-short") !== -1 ||
@@ -77,6 +80,8 @@ Singleton {
                 text.indexOf("verify-disconnected") !== -1
             ) {
                 root.notifyNotRecognized();
+            } else if (text.indexOf("verify-match") !== -1) {
+                root.notifyMatched();
             }
         }
     }
@@ -87,9 +92,7 @@ Singleton {
             return;
 
         const msg = message.toLowerCase();
-        if (msg.indexOf("verify-match") !== -1) {
-            root.notifyMatched();
-        } else if (
+        if (
             msg.indexOf("verify-no-match") !== -1 ||
             msg.indexOf("verify-retry-scan") !== -1 ||
             msg.indexOf("verify-swipe-too-short") !== -1 ||
@@ -99,6 +102,8 @@ Singleton {
             msg.indexOf("not recognized") !== -1
         ) {
             root.notifyNotRecognized();
+        } else if (msg.indexOf("verify-match") !== -1) {
+            root.notifyMatched();
         } else if (
             msg.indexOf("place your") !== -1 ||
             msg.indexOf("swipe your") !== -1 ||
@@ -132,14 +137,15 @@ Singleton {
         }
 
         onExited: function(exitCode, exitStatus) {
-            if (root.state === "Filled")
+            if (root.state === "Filled" || !root._isScanningActive)
                 return;
 
-            if (exitCode === 0) {
-                root.notifyMatched();
-            } else if (root.hasSupport) {
-                root.notifyNotRecognized();
-                restartTimer.restart();
+            if (root.hasSupport) {
+                if (root.state !== "Not recognized") {
+                    root.notifyNotRecognized();
+                } else {
+                    restartTimer.restart();
+                }
             }
         }
     }
@@ -149,7 +155,7 @@ Singleton {
         interval: 1400
         repeat: false
         onTriggered: {
-            if (root.hasSupport && root.state !== "Filled") {
+            if (root.hasSupport && root._isScanningActive && root.state !== "Filled") {
                 root.state = "Scanning";
                 if (!verifyProcess.running) {
                     verifyProcess.running = true;
@@ -173,12 +179,14 @@ Singleton {
 
     function startScanning() {
         if (root.hasSupport && !verifyProcess.running) {
+            root._isScanningActive = true;
             root.state = "Scanning";
             verifyProcess.running = true;
         }
     }
 
     function stopScanning() {
+        root._isScanningActive = false;
         restartTimer.stop();
         if (verifyProcess.running) {
             verifyProcess.running = false;
