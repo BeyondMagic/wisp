@@ -34,7 +34,13 @@ nav = [
       { "003: System Tray" = "feature-record/003-system-tray.md" },
       { "004: Workspace Tray" = "feature-record/004-workspace-tray.md" },
       { "005: Notifications" = "feature-record/005-notifications.md" },
-      { "006: Overview" = "feature-record/006-overview.md" },
+      { "006: Widgets" = [
+          { "General" = "feature-record/006-widgets/index.md" },
+          { "006.1: Calendar" = "feature-record/006-widgets/001-calendar.md" },
+          { "006.2: Habit & Task Tracker" = "feature-record/006-widgets/002-habit-tracker.md" },
+          { "006.3: Focus Timer" = "feature-record/006-widgets/003-focus-timer.md" },
+          { "006.4: Daily Tasks" = "feature-record/006-widgets/004-daily-tasks.md" },
+      ]},
       { "007: Launcher" = [
           { "General" = "feature-record/007-launcher/index.md" },
           { "007.1: Desktop Apps" = "feature-record/007-launcher/001-desktop-apps.md" },

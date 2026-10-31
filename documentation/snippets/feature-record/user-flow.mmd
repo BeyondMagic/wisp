@@ -5,15 +5,22 @@ flowchart TD
 
     F001 -->|Authenticate| Home["Home (Desktop)"]
 
-    subgraph Shell ["Persistent Bar & Trays"]
+    subgraph Shell ["Persistent Bar, Trays & Wallpaper Widgets"]
         F003["003: System Tray (Audio, Network, MPRIS)"]
         F004["004: Workspace Tray"]
         F005["005: Notifications"]
+        F006["006: Widgets (Wallpaper Layer)"]
+    end
+
+    subgraph DesktopWidgets ["006: Wallpaper Widgets"]
+        W1["006.1: Calendar"]
+        W2["006.2: Habit & Task Tracker"]
+        W3["006.3: Focus Timer"]
+        W4["006.4: Daily Tasks"]
     end
 
     subgraph Overlays ["Modal Overlays"]
         F002["002: Power Management"]
-        F006["006: Overview"]
         F007["007: Launcher (Root Search)"]
     end
 
@@ -31,10 +38,17 @@ flowchart TD
     Home --> F003
     Home --> F004
     Home --> F005
+    Home --> F006
 
     Home --> F002
-    Home --> F006
     Home --> F007
+
+    F006 --> W1
+    F006 --> W2
+    F006 --> W3
+    F006 --> W4
+    W4 -->|Start Task| W3
+    W3 -->|Log Completion| W2
 
     F007 --> L1
     F007 --> L2
@@ -46,5 +60,4 @@ flowchart TD
     F007 --> L8
 
     F002 -->|Lock| F001
-    F004 -->|Expand| F006
     L7 -->|Copy & Notify| F005

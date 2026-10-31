@@ -26,7 +26,7 @@ High-level state and screen navigation across the shell lifecycle, mapping how t
 | 003 | 2026-10-24 | [System Tray](./003-system-tray.md)              | **Accepted** |
 | 004 | 2026-10-24 | [Workspace Tray](./004-workspace-tray.md)        | **Accepted** |
 | 005 | 2026-10-24 | [Notifications](./005-notifications.md)          | **Accepted** |
-| 006 | -          | [Overview](./006-overview.md)                    | Proposed     |
+| 006 | 2026-10-31 | [Widgets](./006-widgets/index.md)                | Proposed     |
 | 007 | 2026-10-24 | [Launcher](./007-launcher/index.md)              | **Accepted** |
 
 ## Legend
