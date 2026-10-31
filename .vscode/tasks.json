@@ -19,6 +19,9 @@
       "label": "Zensical: Serve (Live Preview)",
       "type": "shell",
       "command": ".venv/bin/zensical serve",
+      "runOptions": {
+        "runOn": "folderOpen"
+      },
       "problemMatcher": [],
       "isBackground": true,
       "presentation": {
