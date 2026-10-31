@@ -12,7 +12,7 @@ icon: lucide/lock
 
 ## Context
 
-The login screen blocks desktop interaction behind an exclusive Wayland overlay until the user authenticates via PIN/password or a hardware fingerprint scanner. In its standalone form (`source/login.qml`) or within `source/shell.qml`, it projects fullscreen overlay panels across all connected displays (`Quickshell.screens`) via `Variants`, capturing keyboard and pointer events and exiting Quickshell upon successful verification.
+The login screen blocks desktop interaction behind an exclusive Wayland overlay until the user authenticates via password or a hardware fingerprint scanner. It projects fullscreen overlay panels across all connected displays, capturing keyboard and pointer events and exiting Quickshell upon successful verification.
 
 ## Interaction Flow
 
@@ -23,14 +23,14 @@ flowchart TD
     CheckFprint -->|Non-zero| HideFprint[Hide Fingerprint Indicator]
 
     EnableFprint --> Scanning[State: Scanning - Bottom-to-Top Green Reveal]
-    Scanning -->|VerifyStatus: verify-match| Filled[State: Filled - Solid Green #4ac26b]
-    Scanning -->|VerifyStatus: verify-no-match / retry| Warning[State: Not recognized - Solid Amber #e5c07b]
+    Scanning -->|VerifyStatus: verify-match| Filled[State: Filled]
+    Scanning -->|VerifyStatus: verify-no-match / retry| Warning[State: Not recognized]
     Warning -->|After 1.4s| Scanning
 
     Start --> FocusPin[Focus PIN Input]
     FocusPin -->|User presses Enter| PamAuth[Verify against PAM pam.d/qs-login]
     PamAuth -->|PamResult.Success| Filled
-    PamAuth -->|Failure| PinError[Clear Input, Red Border #ed8d9f, Horizontal Shake]
+    PamAuth -->|Failure| PinError[Clear Input, State: Error]
     PinError -->|User types again| FocusPin
 
     Filled --> Exit[Exit Quickshell]
