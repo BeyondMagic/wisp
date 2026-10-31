@@ -12,77 +12,53 @@ icon: lucide/bell
 
 ## Context
 
-The notification subsystem receives desktop notifications from D-Bus, renders interactive visual popups anchored to the top-right of the display, and stores an append-only historical log with isolated binary assets under `$XDG_CACHE_HOME/notifications`.
+Standard notification daemons drop incoming messages once dismissed, and sending applications frequently clean up temporary media files, causing broken image and sound references in notification logs. Users miss past messages or lose track of alerts that expired while away from the screen. The notification service displays interactive popups anchored to the screen edge and maintains an append-only historical log with isolated media assets in the local cache.
 
-## Benchmark
-
-### Legacy `lovemii` Astal Shell
-
-The legacy configuration provided notification handling across two core layers:
-
-- `widget/notification/index.tsx` and `util.tsx`: rendered 400px clamped cards on the Wayland top-right anchor using `AstalNotifd`. Displayed application icons, app names, relative timestamps, rich markup body text, previews for image attachments, and actionable buttons. Cards were styled according to urgency levels: `low` (0), `normal` (1), and `critical` (2).
-- `services/notifications.ts`: persisted incoming notifications to `$XDG_CACHE_HOME/notifications/notifications.json`. To prevent dead links when sending apps cleaned up temporary files, it copied binary image attachments into `images/` and audio files into `sounds/` using deterministic timestamped filenames (`image-<id>-<timestamp>-<basename>`).
+<!--
+AI Agent Context & Architecture:
+- Legacy reference: `lovemii` astal implementation (`widget/notification/`, `services/notifications.ts`).
+- D-Bus interface: `org.freedesktop.Notifications`.
+- Media isolation: Incoming image paths are copied to `$XDG_CACHE_HOME/notifications/images/` and sounds to `$XDG_CACHE_HOME/notifications/sounds/` before external senders delete temporary source files.
+-->
 
 ## Interaction Flow
 
 ```mermaid
 flowchart TD
-    DBusNotif[D-Bus org.freedesktop.Notifications] --> ParseNotif[Parse summary, body, app, urgency, hints]
+    DBusNotif[D-Bus Notification Received] --> ParseNotif[Parse summary, body, app, urgency, hints]
     ParseNotif --> CheckCache{Already logged?}
     CheckCache -->|No| CopyAssets[Copy image/sound files to cache directory]
     CopyAssets --> AppendLog[Append entry to notifications.json]
     CheckCache -->|Yes / Replaced| UpdateActive[Update active popup list]
     AppendLog --> UpdateActive
-    UpdateActive --> RenderPopup[Render 400px popup on top-right anchor]
+    UpdateActive --> RenderPopup[Render popup card on screen anchor]
 
     UserAction[User clicks action button] --> InvokeDBus[Invoke D-Bus action callback]
-    InvokeDBus --> DismissPopup[Remove popup from active display]
+    InvokeDBus --> DismissPopup[Dismiss popup card]
     UserClose[User clicks close button] --> DismissPopup
     Timeout[Notification expires] --> DismissPopup
 ```
 
 1. **Notification Arrival:**
-   - The shell receives notifications via D-Bus (`org.freedesktop.Notifications`).
-   - If a notification replaces an existing ID, the active card updates in place.
-   - New notifications are added to the active popup stack.
+   - The desktop receives notifications over D-Bus (`org.freedesktop.Notifications`).
+   - If a notification replaces an existing ID, the visible popup card updates its text and actions in place.
+   - New notifications append to the active on-screen popup stack.
 
-2. **Asset Isolation & Persistence:**
-   - The persistence service checks if the notification ID was already recorded.
-   - Any local image referenced by absolute file path is copied into `$XDG_CACHE_HOME/notifications/images/`.
-   - Any audio file referenced by sound path is copied into `$XDG_CACHE_HOME/notifications/sounds/`.
-   - The notification record (timestamps, app name, icon, summary, body, urgency, action identifiers, and preserved media paths) is written to `notifications.json`.
+2. **Asset Isolation and Persistence:**
+   - The persistence service verifies whether the notification was previously recorded.
+   - Any local image referenced by absolute file path is copied into the local cache directory.
+   - Any audio file referenced by path is copied into the local sounds cache directory.
+   - The complete notification record (timestamp, sender application, icon, summary text, body content, urgency level, action identifiers, and isolated media paths) is written to disk.
 
 3. **User Interaction:**
-   - Clicking an action button invokes the corresponding D-Bus action callback and dismisses the card.
-   - Clicking the close button (`window-close-symbolic`) dismisses the notification.
-   - Notifications without critical urgency dismiss automatically upon expiration.
+   - Clicking an action button triggers the corresponding D-Bus callback and dismisses the popup.
+   - Clicking the dismiss button removes the card from the screen without triggering action callbacks.
+   - Non-critical notifications dismiss automatically after their timeout duration expires. Critical notifications remain visible until dismissed by user action.
 
 ## Visual Design
 
-```mermaid
-graph TD
-    subgraph Card[Notification Popup Card: 400px width]
-        direction TB
-        subgraph Header[Header Row]
-            AppIcon[App Icon]
-            AppName[App Name]
-            Time[Time: HH:MM]
-            CloseBtn[Dismiss Button]
-        end
-        Separator[Divider Line]
-        subgraph BodyRow[Content Row]
-            Preview[Image Preview]
-            subgraph TextBlock[Text Block]
-                Summary[Summary Label: Bold]
-                Body[Body Label: Pango / HTML Markup]
-            end
-        end
-        subgraph ActionsRow[Action Buttons]
-            Action1[Action 1]
-            Action2[Action 2]
-        end
-    end
-```
+<!-- Figma visual design export placeholder -->
+![Notifications Visual Design](./assets/notifications.png)
 
 ## Implementation
 
@@ -122,6 +98,6 @@ $XDG_CACHE_HOME/notifications/
 
 ### Quickshell Components
 
-- **Popup Surface:** `PanelWindow` anchored to `Edge.Top | Edge.Right` with Wayland layer `Overlay` and `exclusiveZone: 0` so it hovers over application windows.
+- **Popup Surface:** `PanelWindow` anchored to `Edge.Top | Edge.Right` on the Wayland `Overlay` layer with `exclusiveZone: 0` so it hovers above application windows.
 - **Service Integration:** `Quickshell.Services.Notifications` or custom D-Bus service receiving notifications.
-- **Persistence Helper:** QML JavaScript module or external Nushell script ensuring `$XDG_CACHE_HOME/notifications` directories exist, copying binary assets, and writing JSON entries without blocking the UI thread.
+- **Persistence Helper:** QML JavaScript module or external script ensuring storage directories exist, copying binary assets, and writing JSON entries without blocking the UI thread.

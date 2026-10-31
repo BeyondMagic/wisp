@@ -12,7 +12,13 @@ icon: lucide/command
 
 ## Context
 
-The launcher is the central keyboard-driven command palette for `WISP`. Rather than spawning separate standalone utility windows or forcing the user to type repetitive CLI flags in a terminal, it provides a single overlay window that starts on a unified root search and transitions in-place into specialized sub-views.
+Spawning separate standalone utility windows or typing repetitive CLI flags into terminal windows slows down daily work. Users need a single keyboard shortcut to launch applications, run scripts, and inspect tools without leaving the keyboard. The launcher provides a centered command palette overlay that opens on a unified search and transitions in place into dedicated sub-views.
+
+<!--
+AI Agent Context:
+- The command palette is resident in memory on the Wayland WlrLayerShell Overlay layer (`visible` toggled via IPC or shortcut for 0ms popup latency).
+- Sub-views load into a central StackLayout or Loader container without destroying or recreating Wayland surfaces.
+-->
 
 ## Benchmark
 
@@ -50,18 +56,30 @@ stateDiagram-v2
     SubView --> Closed: Action completed (Save / Copy / Apply)
 ```
 
-1. Pressing `Meta + D` opens the centered overlay on the active monitor, resets the view stack to the **Root Search** view, clears any prior query, and focuses the search input.
-2. Typing in the root search filters both desktop applications and built-in sub-views/commands using unified fuzzy matching, while automatically evaluating mathematical expressions inline.
-3. Typing an optional prefix (`:` for emojis/kaomojis, `=` for calculator, `>` for script sub-views, `?` for dictionary) filters directly to that provider.
-4. Pressing `Up` / `Down` or `Tab` / `Shift + Tab` moves selection through the results list.
-5. Pressing `Enter` on a desktop application launches it and closes the launcher. Pressing `Enter` on a sub-view item (such as [Collected Words](./002-collected-words.md)) replaces the root list in-place with that sub-view.
-6. Pressing `Esc` inside any sub-view pops the navigation stack back to the Root Search view. Pressing `Esc` on the Root Search view (or clicking outside the palette frame) closes the launcher.
+1. **Trigger and Reset:**
+   - Pressing `Meta + D` opens the centered overlay on the active monitor.
+   - Opening the overlay resets the view stack to the root search view, clears any previous query text, and focuses the search input.
+
+2. **Search and Query Filtering:**
+   - Typing in the root search filters desktop applications, system commands, and built-in sub-views using fuzzy matching.
+   - Typing a designated prefix (`:` for emojis and kaomojis, `=` for calculator, `>` for script sub-views, `?` for dictionary) switches the provider filter directly.
+
+3. **Keyboard Navigation:**
+   - Pressing Up or Down arrow keys, or Tab or Shift+Tab, moves selection through the results list.
+   - Clicking any row selects and activates that item.
+
+4. **Execution and View Transitions:**
+   - Pressing Enter on a desktop application launches the program and closes the launcher overlay.
+   - Pressing Enter on a sub-view entry replaces the root search list in place with that sub-view.
+   - Pressing Escape inside any sub-view pops the navigation stack back to the root search view.
+   - Pressing Escape in the root search view, or clicking outside the palette window, closes the launcher.
 
 ## Visual Design
 
-<span class="md-typeset-planned">Provide visual design mockups or wireframes of the root command palette frame in Figma.</span>
+<!-- Figma visual design export placeholder -->
+![Launcher Visual Design](./assets/launcher.png)
 
 ## Implementation
 
-- **Window Layer:** Resident `PanelWindow` on the Wayland `WlrLayerShell` Overlay layer (`visible` toggled via IPC/shortcut for `0ms` popup latency) with exclusive keyboard focus while visible.
+- **Window Layer:** Resident `PanelWindow` on the Wayland `WlrLayerShell` Overlay layer (`visible` toggled via IPC or shortcut for 0ms popup latency) with exclusive keyboard focus while visible.
 - **View Stack:** A central `StackLayout` or `Loader` inside the launcher container switches between the root search list and the active sub-view component without creating new Wayland windows.

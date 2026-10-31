@@ -12,68 +12,46 @@ icon: lucide/layers
 
 ## Context
 
-The workspace tray manages per-monitor virtual desktop navigation and active application metadata. Migrated from the legacy Astal implementation in `lovemii`, it combines Kanji workspace numbering, categorized window icons, title tracking, and display corner rounding masks into a cohesive Wayland top bar.
+Multi-monitor workflows make it difficult to identify which virtual workspace is active on each display, which application currently holds focus, or whether background workspaces contain running windows. Users often switch to the wrong workspace or lose track of active windows when navigating across monitors. The workspace tray provides per-monitor virtual desktop navigation, active application category identification, and focused window title tracking within the persistent top bar.
 
-## Benchmark
-
-### Legacy `lovemii` Astal Shell
-
-The legacy Astal configuration implemented these boundaries across discrete modules:
-
-- `widget/bar/workspaces`: rendered 10 workspaces per monitor labeled with Japanese numerals (`一` through `十`), tracking active and empty states via `AstalHyprland`.
-- `widget/bar/icon`: resolved client window classes and titles to custom symbolic SVG icons using a regex mapping table in `config.toml`.
-- `widget/bar/title`: displayed the active window title with a 400px width limit, freezing state when focus moved across monitors.
-- `widget/corner`: placed four layer-shell overlay windows on each display to draw 32px inverted circular arcs matching the bar background color.
+<!--
+AI Agent Context & Architecture:
+- Migrated from legacy Astal implementation in `lovemii` (`widget/bar/workspaces`, `widget/bar/icon`, `widget/bar/title`, `widget/corner`).
+- Hyprland IPC provides client focus and workspace state updates.
+- Window class names match against regex categories to select symbolic icons.
+-->
 
 ## Interaction Flow
 
 ```mermaid
 flowchart TD
-    FocusChange[Hyprland Window Focus Event] --> InspectClient{Client on this monitor?}
+    FocusChange[Window Focus Event] --> InspectClient{Client on active monitor?}
     InspectClient -->|Yes| UpdateIcon[Resolve Category Icon via Class and Title Regex]
-    InspectClient -->|Yes| UpdateTitle[Update Title Label: truncate at 400px]
-    InspectClient -->|No: Focus elsewhere| FreezeState[Retain frozen title and icon on inactive monitor]
-    InspectClient -->|No: Clean workspace| ClearState[Clear title and icon]
+    InspectClient -->|Yes| UpdateTitle[Update Title Label: truncate if long]
+    InspectClient -->|No: Focus elsewhere| FreezeState[Retain last title and icon on inactive monitor]
+    InspectClient -->|No: Empty workspace| ClearState[Clear title and icon]
 
     ClickWorkspace[User clicks workspace button] --> DispatchHypr[Dispatch Hyprland workspace switch]
-    DispatchHypr --> UpdateWorkspaceState[Update active and empty style classes]
+    DispatchHypr --> UpdateWorkspaceState[Update active and occupied states]
 ```
 
 1. **Workspace Navigation:**
-   - The bar renders 10 fixed workspace buttons per monitor, labeled `一` to `十`.
-   - Workspaces with open windows display an occupied state indicator.
-   - The focused workspace displays the active highlight style.
-   - Clicking any workspace button triggers `dispatch workspace <id>` via Hyprland IPC.
+   - The bar renders 10 fixed workspace buttons per monitor.
+   - Workspaces reflect three distinct states: Empty, Occupied (containing open windows), and Active (currently selected workspace).
+   - Clicking any workspace button switches Hyprland focus to that workspace on the active display.
 
 2. **Window Metadata:**
-   - On focus change, the active window class and title are matched against the category dictionary to select the matching symbolic SVG.
-   - The title label reflects the active window title up to 400px wide.
-   - When focus shifts to another monitor, the inactive monitor freezes its last known title and icon.
+   - When window focus changes, the active window class and title match against the category mapping table to select a symbolic application icon.
+   - The window title label reflects the active window title, truncating with an ellipsis when exceeding available bar space.
+   - When focus moves to another monitor, the inactive monitor freezes its last known title and icon rather than clearing abruptly. When a workspace is empty, the title and icon clear.
 
-3. **Display Corner Masks:**
-   - Four dedicated overlay surfaces anchor to the top-left, top-right, bottom-left, and bottom-right corners of each display.
-   - Each overlay paints an inverted circular arc with radius 32px and background color `rgba(5, 5, 5, 1)` to provide rounded screen borders.
+3. **Display Framing:**
+   - Four corner masks anchor to the display corners to provide rounded screen borders framing the desktop.
 
 ## Visual Design
 
-```mermaid
-graph LR
-    subgraph TopBar[Top Bar Layout]
-        direction LR
-        subgraph StartSection[Start Group]
-            Icon[Category Icon: 32px SVG]
-            Title[Active Window Title: max 400px]
-        end
-        subgraph CenterSection[Center Group]
-            Clock[Date and Time]
-        end
-        subgraph EndSection[End Group]
-            Workspaces[Workspaces: 一 二 三 四 五 六 七 八 九 十]
-            Tray[System Tray]
-            Battery[Battery Indicator]
-        end
-    end
-```
+<!-- Figma visual design export placeholder -->
+![Workspace Tray Visual Design](./assets/workspace-tray.png)
 
 ## Implementation
 
@@ -86,17 +64,15 @@ graph LR
     "labels": ["一", "二", "三", "四", "五", "六", "七", "八", "九", "十"]
   },
   "geometry": {
-    "root_size": 16,
     "corner_radius": 32,
-    "title_max_width": 400,
-    "background_color": "rgba(5, 5, 5, 1)"
+    "title_max_width": 400
   }
 }
 ```
 
 ### Application Icon Categories
 
-Window classes map to symbolic SVGs stored under `assets/hicolor/scalable/apps/`:
+Window classes map to symbolic icons:
 
 | Target Symbolic Icon | Sample Matching Window Classes |
 | :--- | :--- |
@@ -115,6 +91,6 @@ Window classes map to symbolic SVGs stored under `assets/hicolor/scalable/apps/`
 
 ### Quickshell Components
 
-- **Workspaces:** implemented via `Quickshell.Hyprland` workspace bindings, mapping workspace index 1–10 to Kanji strings.
-- **Active Title & Icon:** binds to active window properties via Hyprland IPC. Regex matching is evaluated in QML or a lightweight JavaScript helper.
-- **Screen Corner Masks:** implemented as four `PanelWindow` items positioned at display corners, using QML `Canvas` or `Shape` with `PathArc` to render the inverted corner mask.
+- **Workspaces:** Implemented via `Quickshell.Hyprland` workspace bindings, mapping workspace index 1 to 10 to configured label strings.
+- **Active Title and Icon:** Binds to active window properties via Hyprland IPC. Regex matching evaluates in QML or a JavaScript helper.
+- **Display Corner Masks:** Implemented as four `PanelWindow` items positioned at display corners, using QML `Canvas` or `Shape` with `PathArc` to render inverted corner masks.
